@@ -38,7 +38,7 @@ from tensorflow.examples.tutorials.mnist import mnist
 flags = tf.app.flags
 FLAGS = flags.FLAGS
 flags.DEFINE_float('learning_rate', 0.01, 'Initial learning rate.')
-flags.DEFINE_integer('num_epochs', 2, 'Number of epochs to run trainer.')
+flags.DEFINE_integer('num_epochs', 1, 'Number of epochs to run trainer.')
 flags.DEFINE_integer('hidden1', 128, 'Number of units in hidden layer 1.')
 flags.DEFINE_integer('hidden2', 32, 'Number of units in hidden layer 2.')
 flags.DEFINE_integer('batch_size', 100, 'Batch size.')
@@ -115,7 +115,7 @@ def inputs(train, batch_size, num_epochs):
     # (Internally uses a RandomShuffleQueue.)
     # We run this in two threads to avoid being a bottleneck.
     images, sparse_labels = tf.train.batch(
-        [image, label], batch_size=batch_size)
+        [image, label], batch_size=batch_size, num_threads=10, capacity=60000)
 
     return images, sparse_labels
 
@@ -152,8 +152,12 @@ def run_training():
     sess.run(init_op)
 
     # Start input enqueue threads.
+    print("Queue runners: %s" %([qr.name for qr in tf.get_collection(tf.GraphKeys.QUEUE_RUNNERS)]))
+
     coord = tf.train.Coordinator()
     threads = tf.train.start_queue_runners(sess=sess, coord=coord)
+    # waiting for queue to get loaded
+    time.sleep(15)
     run_metadata = tf.RunMetadata()
 
     try:
@@ -173,7 +177,7 @@ def run_training():
                                      run_metadata=run_metadata)
             from tensorflow.python.client import timeline
             trace = timeline.Timeline(step_stats=run_metadata.step_stats)
-            trace_file = open('timeline.reader4.json', 'w')
+            trace_file = open('timeline.reader-1thread.json', 'w')
             trace_file.write(trace.generate_chrome_trace_format())
         else:
             _, loss_value = sess.run([train_op, loss])
