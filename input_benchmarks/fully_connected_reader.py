@@ -175,6 +175,9 @@ def run_training():
             _, loss_value = sess.run([train_op, loss],
                                      options=tf.RunOptions(trace_level=tf.RunOptions.FULL_TRACE),
                                      run_metadata=run_metadata)
+            with open("run_metadata.pbtxt", "w") as out:
+              out.write(str(run_metadata))
+              
             from tensorflow.python.client import timeline
             trace = timeline.Timeline(step_stats=run_metadata.step_stats)
             trace_file = open('timeline.reader-1thread.json', 'w')
