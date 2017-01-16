@@ -43,7 +43,7 @@ flags.DEFINE_float('learning_rate', 0.01, 'Initial learning rate.')
 flags.DEFINE_integer('num_epochs', 2, 'Number of epochs to run trainer.')
 flags.DEFINE_integer('hidden1', 128, 'Number of units in hidden layer 1.')
 flags.DEFINE_integer('hidden2', 32, 'Number of units in hidden layer 2.')
-flags.DEFINE_integer('batch_size', 200, 'Batch size.  '
+flags.DEFINE_integer('batch_size', 100, 'Batch size.  '
                      'Must divide evenly into the dataset sizes.')
 flags.DEFINE_string('train_dir', '/tmp/data',
                     'Directory to put the training data.')
@@ -73,11 +73,13 @@ def run_training():
           labels_initializer, trainable=False, collections=[])
 
       image, label = tf.train.slice_input_producer(
-          [input_images, input_labels], num_epochs=FLAGS.num_epochs)
+          [input_images, input_labels], shuffle=False,
+        num_epochs=FLAGS.num_epochs)
       label = tf.cast(label, tf.int32)
       images, labels = tf.train.batch(
-          [image, label], batch_size=FLAGS.batch_size)
+          [image, label], batch_size=FLAGS.batch_size, num_threads=10)
 
+    import pdb; pdb.set_trace()
     # Build a Graph that computes predictions from the inference model.
     logits = mnist.inference(images, FLAGS.hidden1, FLAGS.hidden2)
 
@@ -132,7 +134,7 @@ def run_training():
                                    run_metadata=run_metadata)
           from tensorflow.python.client import timeline
           trace = timeline.Timeline(step_stats=run_metadata.step_stats)
-          trace_file = open('timeline.var3.json', 'w')
+          trace_file = open('timeline.var.json', 'w')
           trace_file.write(trace.generate_chrome_trace_format())
 
         # Run one step of the model.
