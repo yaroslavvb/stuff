@@ -1,3 +1,10 @@
+# [2017-01-17 07:15:27] time[  0.11] step[        20] speed[ 18286]
+# [2017-01-17 07:15:27] time[  0.14] step[        40] speed[ 14418]
+# [2017-01-17 07:15:27] time[  0.13] step[        60] speed[ 15640]
+# [2017-01-17 07:15:27] time[  0.13] step[        80] speed[ 15572]
+# [2017-01-17 07:15:27] time[  0.13] step[       100] speed[ 15536]
+
+
 import datetime
 import pytz
 from tensorflow.contrib.session_bundle import exporter
