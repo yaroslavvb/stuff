@@ -80,7 +80,7 @@ try:
                 int((steps_to_validate*batch_size)/sec)
                 ))
             start_time = end_time
-        if step > 100:
+        if step > 10000:
           break
 
 
