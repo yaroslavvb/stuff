@@ -17,10 +17,8 @@ batch_size = 100
 min_after_dequeue = 1000
 capacity = thread_number * batch_size + min_after_dequeue
 
-filename = "20161230_part-00390.output.pb.zlib"
-
 filename_queue = tf.train.string_input_producer(
-      tf.train.match_filenames_once(filename),
+      ["./data.zlib"],
       shuffle=True,
       seed = int(time.time()),
       num_epochs=epoch_number)
