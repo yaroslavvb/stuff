@@ -1,4 +1,12 @@
 # range size is  1000000
+# range queue 900000, batch queue 100000, 81510.55 per second
+# range d 900000, batch d 100000
+# range queue 800000, batch queue 200000, 71304.15 per second
+# range d -100000, batch d 100000
+# range queue 700000, batch queue 300000, 65481.16 per second
+#
+# When using enqueue_many=False
+# range size is  1000000
 # range queue 999000, batch queue 1000, 11485.93 per second
 # range d 999000, batch d 1000
 # range queue 998000, batch queue 2000, 13163.80 per second
@@ -8,7 +16,7 @@
 import tensorflow as tf
 import time
 
-
+enqueue_many  = True
 steps_to_validate = 200
 epoch_number = 2
 thread_number = 2
@@ -43,11 +51,19 @@ print("range size is ", sess.run(range_size_node))
 # now create batch and run it manually
 # use size of 2 or get TypeError: 'Tensor' object is not iterable.
 # (possibly singleton list get auto-packed into a single Tensor)
-[b, _] = tf.train.batch([a_queue.dequeue()]*2, batch_size=batch_size,
-                        capacity=capacity)
+if enqueue_many:
+    a_batch = []
+    for i in range(batch_size):
+        a_batch.append(a_queue.dequeue())
+        
+    b_batch = tf.train.batch([a_batch], batch_size=batch_size,
+                             capacity=capacity, enqueue_many=enqueue_many)
+        
+else:
+    [b, _] = tf.train.batch([a_queue.dequeue()]*2, batch_size=batch_size,
+                                capacity=capacity, enqueue_many=enqueue_many)
 
 
-# tf.train.start_queue_runners()
 start_time = time.time()
 old_range_size, old_batch_size = (0, 0)
 
