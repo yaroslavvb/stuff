@@ -1,12 +1,9 @@
-# measure the speed at which batches can be made
-# Only 14k 
-# range queue 1996115, batch queue 3885, 6455.13 per second
-# range d 404771, batch d 3229
-# range queue 1988698, batch queue 11302, 14735.80 per second
-# range d -7417, batch d 7417
-# range queue 1981384, batch queue 18616, 14620.57 per second
-# range d -7314, batch d 7314
-# range queue 1974016, batch queue 25984, 14662.89 per second
+# range size is  1000000
+# range queue 999000, batch queue 1000, 11485.93 per second
+# range d 999000, batch d 1000
+# range queue 998000, batch queue 2000, 13163.80 per second
+# range d -1000, batch d 1000
+# ange queue 997000, batch queue 3000, 13048.20 per second
 
 import tensorflow as tf
 import time
@@ -50,10 +47,16 @@ print("range size is ", sess.run(range_size_node))
                         capacity=capacity)
 
 
-tf.train.start_queue_runners()
+# tf.train.start_queue_runners()
 start_time = time.time()
 old_range_size, old_batch_size = (0, 0)
+
+batch_qr = [qr for qr in tf.get_collection(tf.GraphKeys.QUEUE_RUNNERS) if qr.name.startswith("batch")][0]
+
 while True:
+    for i in range(1000): # put some elements on queue
+        sess.run(batch_qr.enqueue_ops)
+    
     new_range_size, new_batch_size = sess.run([range_size_node, batch_size_node])
     
     new_time = time.time()
@@ -65,7 +68,6 @@ while True:
                                      new_batch_size - old_batch_size))
     start_time = time.time()
     old_range_size, old_batch_size = new_range_size, new_batch_size 
-    time.sleep(0.5)
 
 
 

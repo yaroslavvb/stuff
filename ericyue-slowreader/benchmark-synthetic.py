@@ -1,3 +1,9 @@
+# [1484615767] time[  0.31] step[      2000] speed[652222]
+# [1484615767] time[  0.31] step[      4000] speed[654197]
+# [1484615768] time[  0.30] step[      6000] speed[661347]
+# [1484615768] time[  0.30] step[      8000] speed[662600]
+#
+# with_dequeu_many = False
 # [1484614505] time[  0.97] step[      2000] speed[205131]
 # [1484614506] time[  0.96] step[      4000] speed[208224]
 # [1484614507] time[  0.96] step[      6000] speed[208984]
@@ -11,15 +17,23 @@ steps_to_validate = 2000
 epoch_number = 2
 thread_number = 2
 batch_size = 100
+use_dequeue_many = True
+
 
 # don't use too high of limit, 10**9 hangs (overflows to negative in TF?)
 a_queue = tf.train.range_input_producer(limit=10**3, capacity=1000, shuffle=False)
 #a_queue = tf.train.string_input_producer(["hello"])
-a = a_queue.dequeue()
+
 
 # use an op that guarantees batch_size dequeues
-a_batch = [a+i for i in range(batch_size)]
-a_batch_op = tf.group(*a_batch)
+if use_dequeue_many:
+    a_batch = a_queue.dequeue_many(n=batch_size)
+    a_batch_op = a_batch.op
+else:
+    # otherwise just do batch_size dequeue ops
+    a = a_queue.dequeue()
+    a_batch = [a+i for i in range(batch_size)]
+    a_batch_op = tf.group(*a_batch)
 
 config = tf.ConfigProto(log_device_placement=False)
 config.operation_timeout_in_ms=5000   # terminate on long hangs
