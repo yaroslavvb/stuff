@@ -7,18 +7,21 @@ import tensorflow as tf
 import time
 
 # try benchmarking
-
-# don't use too high of limit, 10**9 hangs (overflows to negative in TF?)
-a_queue = tf.train.range_input_producer(limit=10**3, capacity=1000)
-#a_queue = tf.train.string_input_producer(["hello"])
-a = a_queue.dequeue()
-
 steps_to_validate = 2000
 epoch_number = 2
 thread_number = 2
 batch_size = 100
 
-config = tf.ConfigProto(log_device_placement=True)
+# don't use too high of limit, 10**9 hangs (overflows to negative in TF?)
+a_queue = tf.train.range_input_producer(limit=10**3, capacity=1000, shuffle=False)
+#a_queue = tf.train.string_input_producer(["hello"])
+a = a_queue.dequeue()
+
+# use an op that guarantees batch_size dequeues
+a_batch = [a+i for i in range(batch_size)]
+a_batch_op = tf.group(*a_batch)
+
+config = tf.ConfigProto(log_device_placement=False)
 config.operation_timeout_in_ms=5000   # terminate on long hangs
 sess = tf.InteractiveSession("", config=config)
 
@@ -28,7 +31,7 @@ step = 0
 start_time = time.time()
 while True:
     step+=1
-    sess.run(a.op)
+    sess.run(a_batch_op)
     if step % steps_to_validate == 0:
         end_time = time.time()
         sec = (end_time - start_time)
