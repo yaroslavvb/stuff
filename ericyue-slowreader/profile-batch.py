@@ -1,3 +1,9 @@
+# script for getting cpu profile of queue runners
+# 
+# sudo apt-get install google-perftools
+# LD_PRELOAD has to be set in a forked script, otherwise shell will
+# overwrite the profile file
+
 import os, sys, subprocess
 
 my_env = os.environ.copy()
