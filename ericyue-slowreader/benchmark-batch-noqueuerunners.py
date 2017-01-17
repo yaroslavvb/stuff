@@ -14,9 +14,12 @@
 # ange queue 997000, batch queue 3000, 13048.20 per second
 
 import tensorflow as tf
-import time
+import time, os, sys
+from tensorflow.python.client import timeline
 
+dump_timeline = False
 enqueue_many  = True
+enqueue_many_size = 1000
 steps_to_validate = 200
 epoch_number = 2
 thread_number = 2
@@ -40,7 +43,7 @@ for i in range(1000):
     sess.run(a_queue_qr.enqueue_ops)
 
 
-# check the size
+# check the sizes
 range_size_node = "input_producer/fraction_of_2000000_full/fraction_of_2000000_full_Size:0"
 
 # size gives raw size rather than number of batches
@@ -53,7 +56,7 @@ print("range size is ", sess.run(range_size_node))
 # (possibly singleton list get auto-packed into a single Tensor)
 if enqueue_many:
     a_batch = []
-    for i in range(batch_size):
+    for i in range(enqueue_many_size):
         a_batch.append(a_queue.dequeue())
         
     b_batch = tf.train.batch([a_batch], batch_size=batch_size,
@@ -69,9 +72,26 @@ old_range_size, old_batch_size = (0, 0)
 
 batch_qr = [qr for qr in tf.get_collection(tf.GraphKeys.QUEUE_RUNNERS) if qr.name.startswith("batch")][0]
 
-while True:
-    for i in range(1000): # put some elements on queue
+for i in range(10):
+    for i in range(100): # put some elements on queue
         sess.run(batch_qr.enqueue_ops)
+
+    if dump_timeline == True:
+        run_metadata = tf.RunMetadata()
+        run_options = tf.RunOptions(trace_level=tf.RunOptions.FULL_TRACE)
+
+        sess.run(batch_qr.enqueue_ops, run_metadata=run_metadata,
+                 options=run_options)
+        trace = timeline.Timeline(step_stats=run_metadata.step_stats)
+        trace_fn = '/tmp/ericyue/process.timeline.json'
+        graph_fn = '/tmp/ericyue/process.graph.pbtxt'
+        metadata_fn = '/tmp/ericyue/process.metadata.pbtxt'
+        open(trace_fn, 'w').write(trace.generate_chrome_trace_format())
+        open(graph_fn, 'w').write(str(tf.get_default_graph().as_graph_def()))
+        open(metadata_fn, 'w').write(str(run_metadata))
+
+        sys.exit()
+
     
     new_range_size, new_batch_size = sess.run([range_size_node, batch_size_node])
     
@@ -86,25 +106,3 @@ while True:
     old_range_size, old_batch_size = new_range_size, new_batch_size 
 
 
-
-def let_queue_repopulate(size_tensor, min_elements=100000, sleep_delay=0.5):
-    """Wait until queue has enough elements."""
-    size2 = "input_producer/fraction_of_2000000_full/fraction_of_2000000_full_Size:0"
-    while sess.run(size_tensor) < min_elements:
-        print("Size1: %d, size2: %d" %tuple(sess.run([size_tensor, size2])))
-        time.sleep(sleep_delay)
-
-step = 0
-start_time = time.time()
-while True:
-    step+=1
-    let_queue_repopulate(size_tensor=batch_size_node)
-    sess.run(b.op)
-    if step % steps_to_validate == 0:
-        end_time = time.time()
-        sec = (end_time - start_time)
-        print("[{}] time[{:6.2f}] step[{:10d}] speed[{:6d}]".format(
-            str(end_time).split(".")[0],sec, step,
-            int((steps_to_validate*batch_size)/sec)
-        ))
-        start_time = end_time

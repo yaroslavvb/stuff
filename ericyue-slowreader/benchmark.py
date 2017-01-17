@@ -32,6 +32,10 @@ capacity = thread_number * batch_size + min_after_dequeue
 enqueue_many = True
 enqueue_many_size = 1000
 
+# on macos, doing more than 1k threads fails with
+# libc++abi.dylib: libc++abi.dylib: terminating with uncaught exception of type std::__1::system_error: thread constructor failed: Resource temporarily unavailableterminating with uncaught exception of type std::__1::system_error: thread constructor failed: Resource temporarily unavailable
+
+
 filename_queue = tf.train.string_input_producer(
       ["./data.zlib"],
       shuffle=True,
