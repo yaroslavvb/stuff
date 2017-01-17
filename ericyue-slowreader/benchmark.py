@@ -1,3 +1,9 @@
+# [2017-01-17 09:45:35] time[  0.76] step[       200] speed[ 26240]
+# [2017-01-17 09:45:36] time[  0.57] step[       400] speed[ 35162]
+# [2017-01-17 09:45:36] time[  0.59] step[       600] speed[ 33784]
+# [2017-01-17 09:45:37] time[  0.58] step[       800] speed[ 34662]
+
+# changing to enqueue_many=False
 # [2017-01-17 07:15:27] time[  0.11] step[        20] speed[ 18286]
 # [2017-01-17 07:15:27] time[  0.14] step[        40] speed[ 14418]
 # [2017-01-17 07:15:27] time[  0.13] step[        60] speed[ 15640]
@@ -17,12 +23,14 @@ import numpy as np
 import os
 import tensorflow as tf
 
-steps_to_validate = 20
+steps_to_validate = 200
 epoch_number = 2
 thread_number = 2
 batch_size = 100
 min_after_dequeue = 1000
 capacity = thread_number * batch_size + min_after_dequeue
+enqueue_many = True
+enqueue_many_size = 1000
 
 filename_queue = tf.train.string_input_producer(
       ["./data.zlib"],
@@ -35,13 +43,28 @@ def read_and_decode(filename_queue):
     _, serialized_example = reader.read(filename_queue)
     return serialized_example
 
-serialized_example = read_and_decode(filename_queue)
-batch_serialized_example = tf.train.shuffle_batch(
-    [serialized_example],
-    batch_size=batch_size,
-    num_threads=thread_number,
-    capacity=capacity,
-    min_after_dequeue=min_after_dequeue)
+if enqueue_many:
+    reader = tf.TFRecordReader(options = tf.python_io.TFRecordOptions(tf.python_io.TFRecordCompressionType.ZLIB))
+    queue_batch = []
+    for i in range(enqueue_many_size):
+        _, serialized_example = reader.read(filename_queue)
+        queue_batch.append(serialized_example)
+    batch_serialized_example = tf.train.shuffle_batch(
+        [queue_batch],
+        batch_size=batch_size,
+        num_threads=thread_number,
+        capacity=capacity,
+        min_after_dequeue=min_after_dequeue,
+        enqueue_many=True)
+        
+else:
+    serialized_example = read_and_decode(filename_queue)
+    batch_serialized_example = tf.train.shuffle_batch(
+        [serialized_example],
+        batch_size=batch_size,
+        num_threads=thread_number,
+        capacity=capacity,
+        min_after_dequeue=min_after_dequeue)
 features = tf.parse_example(
     batch_serialized_example,
     features={
