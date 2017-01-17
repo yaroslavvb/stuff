@@ -1,0 +1,202 @@
+{
+    "traceEvents": [
+        {
+            "ph": "M",
+            "pid": 0,
+            "name": "process_name",
+            "args": {
+                "name": "Allocators"
+            }
+        },
+        {
+            "ph": "M",
+            "pid": 1,
+            "name": "process_name",
+            "args": {
+                "name": "/job:localhost/replica:0/task:0/cpu:0 Compute"
+            }
+        },
+        {
+            "ph": "M",
+            "pid": 2,
+            "name": "process_name",
+            "args": {
+                "name": "/job:localhost/replica:0/task:0/cpu:0 Tensors"
+            }
+        },
+        {
+            "dur": 2,
+            "pid": 1,
+            "cat": "Op",
+            "name": "NoOp",
+            "ph": "X",
+            "args": {
+                "op": "NoOp",
+                "name": "_SOURCE"
+            },
+            "ts": 1484608787726014,
+            "tid": 0
+        },
+        {
+            "dur": 3,
+            "pid": 1,
+            "cat": "Op",
+            "name": "Const",
+            "ph": "X",
+            "args": {
+                "op": "Const",
+                "name": "shuffle_batch/n"
+            },
+            "ts": 1484608787726020,
+            "tid": 0
+        },
+        {
+            "dur": 5,
+            "pid": 1,
+            "cat": "Op",
+            "name": "RandomShuffleQueue",
+            "ph": "X",
+            "args": {
+                "op": "RandomShuffleQueue",
+                "name": "shuffle_batch/random_shuffle_queue"
+            },
+            "ts": 1484608787726023,
+            "tid": 1
+        },
+        {
+            "dur": 7,
+            "pid": 1,
+            "cat": "Op",
+            "name": "Const",
+            "ph": "X",
+            "args": {
+                "op": "Const",
+                "name": "ParseExample/Const"
+            },
+            "ts": 1484608787726024,
+            "tid": 0
+        },
+        {
+            "dur": 2,
+            "pid": 1,
+            "cat": "Op",
+            "name": "Const",
+            "ph": "X",
+            "args": {
+                "op": "Const",
+                "name": "ParseExample/ParseExample/names"
+            },
+            "ts": 1484608787726032,
+            "tid": 0
+        },
+        {
+            "dur": 2,
+            "pid": 1,
+            "cat": "Op",
+            "name": "Const",
+            "ph": "X",
+            "args": {
+                "op": "Const",
+                "name": "ParseExample/ParseExample/sparse_keys_0"
+            },
+            "ts": 1484608787726035,
+            "tid": 0
+        },
+        {
+            "dur": 1,
+            "pid": 1,
+            "cat": "Op",
+            "name": "Const",
+            "ph": "X",
+            "args": {
+                "op": "Const",
+                "name": "ParseExample/ParseExample/sparse_keys_1"
+            },
+            "ts": 1484608787726038,
+            "tid": 0
+        },
+        {
+            "dur": 2,
+            "pid": 1,
+            "cat": "Op",
+            "name": "Const",
+            "ph": "X",
+            "args": {
+                "op": "Const",
+                "name": "ParseExample/ParseExample/dense_keys_0"
+            },
+            "ts": 1484608787726040,
+            "tid": 0
+        },
+        {
+            "dur": 97,
+            "pid": 1,
+            "cat": "Op",
+            "name": "QueueDequeueMany",
+            "ph": "X",
+            "args": {
+                "input1": "shuffle_batch/n",
+                "op": "QueueDequeueMany",
+                "name": "shuffle_batch",
+                "input0": "shuffle_batch/random_shuffle_queue"
+            },
+            "ts": 1484608787726029,
+            "tid": 1
+        },
+        {
+            "pid": 1,
+            "cat": "DataFlow",
+            "name": "shuffle_batch/n",
+            "ph": "s",
+            "id": 0,
+            "ts": 1484608787726023,
+            "tid": 0
+        },
+        {
+            "pid": 1,
+            "cat": "DataFlow",
+            "name": "shuffle_batch/n",
+            "ph": "t",
+            "id": 0,
+            "ts": 1484608787726029,
+            "tid": 1
+        },
+        {
+            "dur": 115,
+            "pid": 1,
+            "cat": "Op",
+            "name": "ParseExample",
+            "ph": "X",
+            "args": {
+                "input2": "ParseExample/ParseExample/sparse_keys_0",
+                "input3": "ParseExample/ParseExample/sparse_keys_1",
+                "input4": "ParseExample/ParseExample/dense_keys_0",
+                "name": "ParseExample/ParseExample",
+                "input5": "ParseExample/Const",
+                "input1": "ParseExample/ParseExample/names",
+                "op": "ParseExample",
+                "input0": "shuffle_batch"
+            },
+            "ts": 1484608787726132,
+            "tid": 0
+        },
+        {
+            "pid": 1,
+            "cat": "DataFlow",
+            "name": "shuffle_batch",
+            "ph": "s",
+            "id": 1,
+            "ts": 1484608787726126,
+            "tid": 1
+        },
+        {
+            "pid": 1,
+            "cat": "DataFlow",
+            "name": "shuffle_batch",
+            "ph": "t",
+            "id": 1,
+            "ts": 1484608787726132,
+            "tid": 0
+        }
+    ]
+}
