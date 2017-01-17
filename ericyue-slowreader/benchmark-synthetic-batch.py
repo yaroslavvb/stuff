@@ -11,7 +11,7 @@ import tensorflow as tf
 import time
 
 
-steps_to_validate = 20
+steps_to_validate = 200
 epoch_number = 2
 thread_number = 2
 batch_size = 100
@@ -31,12 +31,19 @@ config.operation_timeout_in_ms=5000   # terminate on long hangs
 sess = tf.InteractiveSession("", config=config)
 
 tf.train.start_queue_runners()
-time.sleep(5)
+
+def let_queue_repopulate(size_tensor, min_elements=100000, sleep_delay=0.5):
+    """Wait until queue has enough elements."""
+    size2 = "input_producer/fraction_of_2000000_full/fraction_of_2000000_full_Size:0"
+    while sess.run(size_tensor) < min_elements:
+        print("Size1: %d, size2: %d" %tuple(sess.run([size_tensor, size2])))
+        time.sleep(sleep_delay)
 
 step = 0
 start_time = time.time()
 while True:
     step+=1
+    let_queue_repopulate(size_tensor="batch/fifo_queue_Size:0")
     sess.run(b.op)
     if step % steps_to_validate == 0:
         end_time = time.time()
