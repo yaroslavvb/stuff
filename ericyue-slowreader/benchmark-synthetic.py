@@ -1,7 +1,7 @@
-# [1484610732] time[  0.17] step[      2000] speed[1173998]
-# [1484610733] time[  0.14] step[      4000] speed[1462395]
-# [1484610733] time[  0.14] step[      6000] speed[1473741]
-# [1484610733] time[  0.14] step[      8000] speed[1468095]
+# [1484614505] time[  0.97] step[      2000] speed[205131]
+# [1484614506] time[  0.96] step[      4000] speed[208224]
+# [1484614507] time[  0.96] step[      6000] speed[208984]
+# [1484614508] time[  0.95] step[      8000] speed[209907]
 
 import tensorflow as tf
 import time
