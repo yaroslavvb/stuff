@@ -1,0 +1,225 @@
+{
+    "traceEvents": [
+        {
+            "pid": 0,
+            "ph": "M",
+            "name": "process_name",
+            "args": {
+                "name": "Allocators"
+            }
+        },
+        {
+            "pid": 1,
+            "ph": "M",
+            "name": "process_name",
+            "args": {
+                "name": "/job:localhost/replica:0/task:0/cpu:0 Compute"
+            }
+        },
+        {
+            "pid": 2,
+            "ph": "M",
+            "name": "process_name",
+            "args": {
+                "name": "/job:localhost/replica:0/task:0/cpu:0 Tensors"
+            }
+        },
+        {
+            "cat": "Op",
+            "args": {
+                "name": "_SOURCE",
+                "op": "NoOp"
+            },
+            "ts": 1485122397016884,
+            "dur": 6,
+            "tid": 0,
+            "pid": 1,
+            "ph": "X",
+            "name": "NoOp"
+        },
+        {
+            "cat": "Op",
+            "args": {
+                "name": "Variable_1",
+                "op": "VariableV2"
+            },
+            "ts": 1485122397016901,
+            "dur": 9,
+            "tid": 0,
+            "pid": 1,
+            "ph": "X",
+            "name": "VariableV2"
+        },
+        {
+            "cat": "Op",
+            "args": {
+                "input0": "Variable_1",
+                "name": "Variable_1/read",
+                "op": "Identity"
+            },
+            "ts": 1485122397016911,
+            "dur": 4,
+            "tid": 0,
+            "pid": 1,
+            "ph": "X",
+            "name": "Identity"
+        },
+        {
+            "cat": "Op",
+            "args": {
+                "name": "Variable",
+                "op": "VariableV2"
+            },
+            "ts": 1485122397016910,
+            "dur": 12,
+            "tid": 1,
+            "pid": 1,
+            "ph": "X",
+            "name": "VariableV2"
+        },
+        {
+            "cat": "Op",
+            "args": {
+                "name": "fifo_queue",
+                "op": "FIFOQueueV2"
+            },
+            "ts": 1485122397016904,
+            "dur": 34,
+            "tid": 2,
+            "pid": 1,
+            "ph": "X",
+            "name": "FIFOQueueV2"
+        },
+        {
+            "cat": "Op",
+            "args": {
+                "input0": "Variable",
+                "name": "Variable/read",
+                "op": "Identity"
+            },
+            "ts": 1485122397016947,
+            "dur": 5,
+            "tid": 0,
+            "pid": 1,
+            "ph": "X",
+            "name": "Identity"
+        },
+        {
+            "cat": "DataFlow",
+            "ts": 1485122397016922,
+            "tid": 1,
+            "pid": 1,
+            "ph": "s",
+            "name": "Variable",
+            "id": 0
+        },
+        {
+            "cat": "DataFlow",
+            "ts": 1485122397016947,
+            "tid": 0,
+            "pid": 1,
+            "ph": "t",
+            "name": "Variable",
+            "id": 0
+        },
+        {
+            "cat": "Op",
+            "args": {
+                "input0": "fifo_queue",
+                "name": "ones",
+                "op": "QueueEnqueueManyV2",
+                "input1": "Variable_1/read"
+            },
+            "ts": 1485122397016958,
+            "dur": 1997448,
+            "tid": 0,
+            "pid": 1,
+            "ph": "X",
+            "name": "QueueEnqueueManyV2"
+        },
+        {
+            "cat": "DataFlow",
+            "ts": 1485122397016938,
+            "tid": 2,
+            "pid": 1,
+            "ph": "s",
+            "name": "fifo_queue",
+            "id": 1
+        },
+        {
+            "cat": "DataFlow",
+            "ts": 1485122397016958,
+            "tid": 0,
+            "pid": 1,
+            "ph": "t",
+            "name": "fifo_queue",
+            "id": 1
+        },
+        {
+            "cat": "Op",
+            "args": {
+                "input0": "fifo_queue",
+                "name": "zeros",
+                "op": "QueueEnqueueManyV2",
+                "input1": "Variable/read"
+            },
+            "ts": 1485122397016961,
+            "dur": 1997461,
+            "tid": 1,
+            "pid": 1,
+            "ph": "X",
+            "name": "QueueEnqueueManyV2"
+        },
+        {
+            "cat": "DataFlow",
+            "ts": 1485122397016938,
+            "tid": 2,
+            "pid": 1,
+            "ph": "s",
+            "name": "fifo_queue",
+            "id": 2
+        },
+        {
+            "cat": "DataFlow",
+            "ts": 1485122397016961,
+            "tid": 1,
+            "pid": 1,
+            "ph": "t",
+            "name": "fifo_queue",
+            "id": 2
+        },
+        {
+            "cat": "DataFlow",
+            "ts": 1485122397016952,
+            "tid": 0,
+            "pid": 1,
+            "ph": "s",
+            "name": "Variable/read",
+            "id": 3
+        },
+        {
+            "cat": "DataFlow",
+            "ts": 1485122397016961,
+            "tid": 1,
+            "pid": 1,
+            "ph": "t",
+            "name": "Variable/read",
+            "id": 3
+        },
+        {
+            "cat": "Op",
+            "args": {
+                "input0": "^zeros",
+                "name": "group_deps",
+                "op": "NoOp",
+                "input1": "^ones"
+            },
+            "ts": 1485122399014504,
+            "dur": 6,
+            "tid": 0,
+            "pid": 1,
+            "ph": "X",
+            "name": "NoOp"
+        }
+    ]
+}
