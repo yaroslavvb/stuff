@@ -1,3 +1,5 @@
+# On Titan X (Pascal)
+# 8192 x 8192 matmul took: 0.10 sec, 11304.59 G ops/sec
 # http://stackoverflow.com/questions/41804380/testing-gpu-with-tensorflow-matrix-multiplication
 
 import os
