@@ -16,6 +16,7 @@ with tf.device("/gpu:0"):
     product = tf.matmul(matrix1, matrix2)
 
 
+# avoid optimizing away redundant nodes
 config = tf.ConfigProto(graph_options=tf.GraphOptions(optimizer_options=tf.OptimizerOptions(opt_level=tf.OptimizerOptions.L0)))
 sess = tf.Session(config=config)
 
@@ -29,7 +30,7 @@ start = time.time()
 for i in range(iters):
   sess.run(product.op)
 end = time.time()
-ops = n**3 + (n-1)*n**2 # n*(n-1) additions, n^2 multiplications
+ops = n**3 + (n-1)*n**2 # n^2*(n-1) additions, n^3 multiplications
 elapsed = (end - start)
 rate = iters*ops/elapsed/10**9
 print('\n %d x %d matmul took: %.2f sec, %.2f G ops/sec' % (n, n,
