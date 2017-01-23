@@ -1,3 +1,5 @@
+# http://stackoverflow.com/questions/41804380/testing-gpu-with-tensorflow-matrix-multiplication
+
 import os
 import sys
 os.environ["CUDA_VISIBLE_DEVICES"]="1"
