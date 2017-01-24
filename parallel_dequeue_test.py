@@ -1,3 +1,5 @@
+# http://stackoverflow.com/questions/41830206/how-to-share-a-queue-containing-variable-length-sequences-batches-between-multip
+#
 # 0.12.1
 # v0.12.0-10-g4d924e7-dirty
 # [array([1, 2, 3, 4, 0], dtype=int32), True]
@@ -19,8 +21,8 @@ os.environ["CUDA_VISIBLE_DEVICES"]=""
 import tensorflow as tf
 
 def create_session():
-    config = tf.ConfigProto(log_device_placement=False)
     #    config = tf.ConfigProto(graph_options=tf.GraphOptions(optimizer_options=tf.OptimizerOptions(opt_level=tf.OptimizerOptions.L0)))
+    config = tf.ConfigProto()
     sess = tf.InteractiveSession("", config=config)
     return sess
 
