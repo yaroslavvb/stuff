@@ -3,7 +3,7 @@
 # tf low-level -- 36 usec
 # numpy -- 20 usec
 # 
-# xeon: tf -- 130 usec, tf low level -- 77, tf low level+XLA -- 121 usec, numpy -- 30
+# xeon: tf -- 130 usec, tf low level -- 77, tf low level+XLA -- 30 usec, numpy -- 30
 #
 # benchmark tf
 # python tiny_tf.py
@@ -11,8 +11,14 @@
 # benchmark tf using low level API
 # python tiny_tf.py fast
 #
+# benchmark tf using low level API
+# python tiny_tf.py fast-nofetch
+#
 # bencharmk tf using low level API + XLA
 # python tiny_tf.py fastxla
+#
+# bencharmk tf using low level API + XLA
+# python tiny_tf.py fastxla-nofetch
 #
 # benchmark numpy
 # python tiny_tf.py np
@@ -40,12 +46,12 @@ if len(sys.argv)>1 and sys.argv[1]=='np':
 else:
     run_numpy = False
 
-if len(sys.argv)>1 and sys.argv[1]=='fast':
+if len(sys.argv)>1 and 'fast' in sys.argv[1]:
     run_fast = True
 else:
     run_fast = False
     
-if len(sys.argv)>1 and sys.argv[1]=='fastxla':
+if len(sys.argv)>1 and 'xla' in sys.argv[1]:
     run_fastxla = True
 else:
     run_fastxla = False
@@ -86,10 +92,13 @@ options=None
 feed_dict = {}
 
 # uncomment lines below if you want to fetch things
-#fetch_list = [b'MatMul_2:0']
-#target_list = []
-fetch_list=[]
-target_list=[b'MatMul_2']
+fetch_list = [b'MatMul_2:0']
+target_list = []
+
+if len(sys.argv)>1 and 'nofetch' in sys.argv[1]:
+    fetch_list=[]
+    target_list=[b'MatMul_2']
+    
 run_metadata = None
 status_orig = errors.raise_exception_on_not_ok_status()
 status = pywrap_tensorflow.TF_NewStatus()
