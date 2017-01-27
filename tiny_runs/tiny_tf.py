@@ -1,14 +1,27 @@
-# mac: tf -- 90 usec, tf low-level -- 44 usec, tf low-level without fetches -- 36 usec, numpy -- 20 usec
-# xeon: tf -- 130 usec, fast version -- 77, fastxla -- 121 usec, numpy -- 30
-# tf: python tiny_tf.py
-# numpy: python tiny_tf.py np
-# tf low level: python tiny_tf.py fast
-# tf low level + xla: python tiny_tf.py fastxla
+# mac: tf -- 90 usec,
+# tf low-level with fetches -- 44 usec
+# tf low-level -- 36 usec
+# numpy -- 20 usec
+# 
+# xeon: tf -- 130 usec, tf low level -- 77, tf low level+XLA -- 121 usec, numpy -- 30
+#
+# benchmark tf
+# python tiny_tf.py
+#
+# benchmark tf using low level API
+# python tiny_tf.py fast
+#
+# bencharmk tf using low level API + XLA
+# python tiny_tf.py fastxla
+#
+# benchmark numpy
+# python tiny_tf.py np
 
 
 import os, sys
 os.environ["CUDA_VISIBLE_DEVICES"]=""
 
+from tensorflow.python import pywrap_tensorflow
 from tensorflow.python import pywrap_tensorflow as tf_session
 from tensorflow.python.framework import errors
 import tensorflow as tf
@@ -57,7 +70,6 @@ def create_graph():
     else:
         return _create_graph()
         
-#config = tf.ConfigProto(graph_options=tf.GraphOptions(optimizer_options=tf.OptimizerOptions(opt_level=tf.OptimizerOptions.L0)))
 config = tf.ConfigProto()
                         
 sess = tf.Session(config=config)
@@ -72,17 +84,18 @@ def f_numpy(): return np.empty((1, n), dtype=dtype).dot(a_n).dot(b_n).dot(c_n)
 session = sess._session
 options=None
 feed_dict = {}
+
+# uncomment lines below if you want to fetch things
 #fetch_list = [b'MatMul_2:0']
 #target_list = []
 fetch_list=[]
 target_list=[b'MatMul_2']
 run_metadata = None
-#    run_metadata = tf_session.TF_NewBuffer()
 status_orig = errors.raise_exception_on_not_ok_status()
-status = status_orig.__enter__()
+status = pywrap_tensorflow.TF_NewStatus()
+
 def fast_tf():
-    with errors.raise_exception_on_not_ok_status() as status:
-        return tf_session.TF_Run(session, options,
+    return tf_session.TF_Run(session, options,
                              feed_dict, fetch_list, target_list,
                              status, run_metadata)
 
