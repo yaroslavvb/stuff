@@ -1,9 +1,9 @@
-# mac: tf -- 90 usec, fast version -- 44 usec, without fetches -- 36 usec, numpy-- 20 usec
-# cirra: tf -- 130 usec, fast version -- 77, fastxla -- 121 usec, numpy -- 30
-# python tiny_tf.py np
-# python tiny_tf.py np
-# python tiny_tf.py fast
-# python tiny_tf.py fastxla
+# mac: tf -- 90 usec, tf low-level -- 44 usec, tf low-level without fetches -- 36 usec, numpy -- 20 usec
+# xeon: tf -- 130 usec, fast version -- 77, fastxla -- 121 usec, numpy -- 30
+# tf: python tiny_tf.py
+# numpy: python tiny_tf.py np
+# tf low level: python tiny_tf.py fast
+# tf low level + xla: python tiny_tf.py fastxla
 
 
 import os, sys
