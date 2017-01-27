@@ -109,7 +109,7 @@ for i in range(num_iters+warmup_iters):
         start_time = time.time()
     if run_numpy:
         f_numpy()
-    elif run_fast and i>=warmup_iters:
+    elif (run_fast or run_fastxla) and i>=warmup_iters:
         fast_tf()
     else:
         sess.run(y)

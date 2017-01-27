@@ -36,6 +36,7 @@ num_parallel = 5
 dtype = tf.int32
 queue = tf.FIFOQueue(capacity=n, dtypes=[dtype], shapes=[()])
 enqueue_op = queue.enqueue_many(tf.range(n))
+size_op = queue.size()
 
 dequeue_ops = []
 for i in range(num_parallel):
@@ -51,4 +52,254 @@ sess.run(enqueue_op)
 print(tf.__version__)
 print(tf.__git_version__)
 for i in range(n//num_parallel):
-    print(sess.run([batch, all_unique]))
+    print(sess.run([batch, all_unique, size_op]))
+print(tf.get_default_graph().as_graph_def())
+
+# node {
+#   name: "fifo_queue"
+#   op: "FIFOQueueV2"
+#   attr {
+#     key: "capacity"
+#     value {
+#       i: 100
+#     }
+#   }
+#   attr {
+#     key: "component_types"
+#     value {
+#       list {
+#         type: DT_INT32
+#       }
+#     }
+#   }
+#   attr {
+#     key: "container"
+#     value {
+#       s: ""
+#     }
+#   }
+#   attr {
+#     key: "shapes"
+#     value {
+#       list {
+#         shape {
+#         }
+#       }
+#     }
+#   }
+#   attr {
+#     key: "shared_name"
+#     value {
+#       s: ""
+#     }
+#   }
+# }
+# node {
+#   name: "range/start"
+#   op: "Const"
+#   attr {
+#     key: "dtype"
+#     value {
+#       type: DT_INT32
+#     }
+#   }
+#   attr {
+#     key: "value"
+#     value {
+#       tensor {
+#         dtype: DT_INT32
+#         tensor_shape {
+#         }
+#         int_val: 0
+#       }
+#     }
+#   }
+# }
+# node {
+#   name: "range/limit"
+#   op: "Const"
+#   attr {
+#     key: "dtype"
+#     value {
+#       type: DT_INT32
+#     }
+#   }
+#   attr {
+#     key: "value"
+#     value {
+#       tensor {
+#         dtype: DT_INT32
+#         tensor_shape {
+#         }
+#         int_val: 100
+#       }
+#     }
+#   }
+# }
+# node {
+#   name: "range/delta"
+#   op: "Const"
+#   attr {
+#     key: "dtype"
+#     value {
+#       type: DT_INT32
+#     }
+#   }
+#   attr {
+#     key: "value"
+#     value {
+#       tensor {
+#         dtype: DT_INT32
+#         tensor_shape {
+#         }
+#         int_val: 1
+#       }
+#     }
+#   }
+# }
+# node {
+#   name: "range"
+#   op: "Range"
+#   input: "range/start"
+#   input: "range/limit"
+#   input: "range/delta"
+#   attr {
+#     key: "Tidx"
+#     value {
+#       type: DT_INT32
+#     }
+#   }
+# }
+# node {
+#   name: "fifo_queue_EnqueueMany"
+#   op: "QueueEnqueueManyV2"
+#   input: "fifo_queue"
+#   input: "range"
+#   attr {
+#     key: "Tcomponents"
+#     value {
+#       list {
+#         type: DT_INT32
+#       }
+#     }
+#   }
+#   attr {
+#     key: "timeout_ms"
+#     value {
+#       i: -1
+#     }
+#   }
+# }
+# node {
+#   name: "fifo_queue_Size"
+#   op: "QueueSizeV2"
+#   input: "fifo_queue"
+# }
+# node {
+#   name: "fifo_queue_Dequeue"
+#   op: "QueueDequeueV2"
+#   input: "fifo_queue"
+#   attr {
+#     key: "component_types"
+#     value {
+#       list {
+#         type: DT_INT32
+#       }
+#     }
+#   }
+#   attr {
+#     key: "timeout_ms"
+#     value {
+#       i: -1
+#     }
+#   }
+# }
+# node {
+#   name: "fifo_queue_Dequeue_1"
+#   op: "QueueDequeueV2"
+#   input: "fifo_queue"
+#   attr {
+#     key: "component_types"
+#     value {
+#       list {
+#         type: DT_INT32
+#       }
+#     }
+#   }
+#   attr {
+#     key: "timeout_ms"
+#     value {
+#       i: -1
+#     }
+#   }
+# }
+# node {
+#   name: "fifo_queue_Dequeue_2"
+#   op: "QueueDequeueV2"
+#   input: "fifo_queue"
+#   attr {
+#     key: "component_types"
+#     value {
+#       list {
+#         type: DT_INT32
+#       }
+#     }
+#   }
+#   attr {
+#     key: "timeout_ms"
+#     value {
+#       i: -1
+#     }
+#   }
+# }
+# node {
+#   name: "fifo_queue_Dequeue_3"
+#   op: "QueueDequeueV2"
+#   input: "fifo_queue"
+#   attr {
+#     key: "component_types"
+#     value {
+#       list {
+#         type: DT_INT32
+#       }
+#     }
+#   }
+#   attr {
+#     key: "timeout_ms"
+#     value {
+#       i: -1
+#     }
+#   }
+# }
+# node {
+#   name: "fifo_queue_Dequeue_4"
+#   op: "QueueDequeueV2"
+#   input: "fifo_queue"
+#   attr {
+#     key: "component_types"
+#     value {
+#       list {
+#         type: DT_INT32
+#       }
+#     }
+#   }
+#   attr {
+#     key: "timeout_ms"
+#     value {
+#       i: -1
+#     }
+#   }
+# }
+# node {
+#   name: "stack"
+#   op: "Pack"
+#   input: "fifo_queue_Dequeue"
+#   input: "fifo_queue_Dequeue_1"
+#   input: "fifo_queue_Dequeue_2"
+#   input: "fifo_queue_Dequeue_3"
+#   input: "fifo_queue_Dequeue_4"
+#   attr {
+#     key: "N"
+#     value {
+#       i: 5
+#     }
