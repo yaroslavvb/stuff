@@ -3,7 +3,7 @@
 # tf low-level -- 36 usec
 # numpy -- 20 usec
 # 
-# xeon: tf -- 130 usec, tf low level -- 77, tf low level+XLA -- 30 usec, numpy -- 30
+# xeon: tf -- 130 usec, tf low level -- 77, tf low level+XLA -- 20 usec, numpy -- 30
 #
 # benchmark tf
 # python tiny_tf.py
@@ -108,7 +108,7 @@ def fast_tf():
                              feed_dict, fetch_list, target_list,
                              status, run_metadata)
 
-num_iters = 1000
+num_iters = 5000
 warmup_iters = 2
 iter_times = np.zeros((num_iters+warmup_iters,))
 y = create_graph()
