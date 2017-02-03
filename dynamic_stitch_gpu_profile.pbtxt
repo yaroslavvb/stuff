@@ -1,0 +1,3343 @@
+step_stats {
+  dev_stats {
+    device: "/job:localhost/replica:0/task:0/cpu:0"
+    node_stats {
+      node_name: "_SOURCE"
+      all_start_micros: 1486162184520805
+      op_start_rel_micros: 18
+      op_end_rel_micros: 19
+      all_end_rel_micros: 63
+      memory {
+        allocator_name: "cpu"
+      }
+      timeline_label: "_SOURCE = NoOp()"
+      scheduled_micros: 1486162184520748
+    }
+  }
+  dev_stats {
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    node_stats {
+      node_name: "_SOURCE"
+      all_start_micros: 1486162184520807
+      op_start_rel_micros: 11352
+      op_end_rel_micros: 11403
+      all_end_rel_micros: 11412
+      memory {
+        allocator_name: "gpu_bfc"
+      }
+      timeline_label: "_SOURCE = NoOp()"
+      scheduled_micros: 1486162184520733
+    }
+    node_stats {
+      node_name: "x"
+      all_start_micros: 1486162184532227
+      op_start_rel_micros: 2
+      op_end_rel_micros: 5
+      all_end_rel_micros: 24
+      memory {
+        allocator_name: "gpu_bfc"
+      }
+      output {
+        tensor_description {
+          dtype: DT_FLOAT
+          shape {
+            dim {
+              size: 100
+            }
+          }
+          allocation_description {
+            requested_bytes: 400
+            allocated_bytes: 512
+            allocator_name: "gpu_bfc"
+            allocation_id: 2
+            ptr: 1108325958912
+          }
+        }
+      }
+      timeline_label: "x = Const()"
+      scheduled_micros: 1486162184532219
+    }
+    node_stats {
+      node_name: "range/start"
+      all_start_micros: 1486162184532254
+      op_start_rel_micros: 1
+      op_end_rel_micros: 3
+      all_end_rel_micros: 7
+      memory {
+        allocator_name: "gpu_bfc"
+      }
+      output {
+        tensor_description {
+          dtype: DT_INT32
+          shape {
+          }
+          allocation_description {
+            requested_bytes: 4
+            allocated_bytes: 256
+            allocator_name: "cuda_host_bfc"
+            allocation_id: 2
+            ptr: 1120319569920
+          }
+        }
+      }
+      timeline_label: "range/start = Const()"
+      scheduled_micros: 1486162184532251
+    }
+    node_stats {
+      node_name: "range/limit"
+      all_start_micros: 1486162184532263
+      op_end_rel_micros: 2
+      all_end_rel_micros: 5
+      memory {
+        allocator_name: "gpu_bfc"
+      }
+      output {
+        tensor_description {
+          dtype: DT_INT32
+          shape {
+          }
+          allocation_description {
+            requested_bytes: 4
+            allocated_bytes: 256
+            allocator_name: "cuda_host_bfc"
+            allocation_id: 3
+            ptr: 1120319570176
+          }
+        }
+      }
+      timeline_label: "range/limit = Const()"
+      scheduled_micros: 1486162184532261
+    }
+    node_stats {
+      node_name: "range/delta"
+      all_start_micros: 1486162184532269
+      op_end_rel_micros: 2
+      all_end_rel_micros: 4
+      memory {
+        allocator_name: "gpu_bfc"
+      }
+      output {
+        tensor_description {
+          dtype: DT_INT32
+          shape {
+          }
+          allocation_description {
+            requested_bytes: 4
+            allocated_bytes: 256
+            allocator_name: "cuda_host_bfc"
+            allocation_id: 4
+            ptr: 1120319570432
+          }
+        }
+      }
+      timeline_label: "range/delta = Const()"
+      scheduled_micros: 1486162184532267
+    }
+    node_stats {
+      node_name: "identity-0"
+      all_start_micros: 1486162184532312
+      op_start_rel_micros: 1
+      op_end_rel_micros: 3
+      all_end_rel_micros: 6
+      memory {
+        allocator_name: "gpu_bfc"
+      }
+      output {
+        tensor_description {
+          dtype: DT_FLOAT
+          shape {
+            dim {
+              size: 100
+            }
+          }
+          allocation_description {
+            requested_bytes: 400
+            allocated_bytes: 512
+            allocator_name: "gpu_bfc"
+            allocation_id: 2
+            ptr: 1108325958912
+          }
+        }
+      }
+      timeline_label: "identity-0 = Identity(x)"
+      scheduled_micros: 1486162184532291
+    }
+    node_stats {
+      node_name: "range"
+      all_start_micros: 1486162184532322
+      op_start_rel_micros: 1
+      op_end_rel_micros: 660
+      all_end_rel_micros: 676
+      memory {
+        allocator_name: "gpu_bfc"
+      }
+      memory {
+        allocator_name: "cpu_pool"
+        total_bytes: 400
+      }
+      output {
+        tensor_description {
+          dtype: DT_INT32
+          shape {
+            dim {
+              size: 100
+            }
+          }
+          allocation_description {
+            requested_bytes: 400
+            allocator_name: "cpu_pool"
+            ptr: 140413138685984
+          }
+        }
+      }
+      timeline_label: "range = Range(range/start, range/limit, range/delta)"
+      scheduled_micros: 1486162184532318
+    }
+    node_stats {
+      node_name: "stitch-0"
+      all_start_micros: 1486162184533623
+      op_start_rel_micros: 3
+      op_end_rel_micros: 56
+      all_end_rel_micros: 70
+      memory {
+        allocator_name: "gpu_bfc"
+      }
+      memory {
+        allocator_name: "cuda_host_bfc"
+        total_bytes: 512
+        peak_bytes: 512
+      }
+      output {
+        tensor_description {
+          dtype: DT_FLOAT
+          shape {
+            dim {
+              size: 100
+            }
+          }
+          allocation_description {
+            requested_bytes: 400
+            allocated_bytes: 512
+            allocator_name: "cuda_host_bfc"
+            allocation_id: 7
+            has_single_reference: true
+            ptr: 1120319571712
+          }
+        }
+      }
+      timeline_label: "stitch-0 = DynamicStitch(range, range, x/_1, identity-0/_3)"
+      scheduled_micros: 1486162184533619
+    }
+    node_stats {
+      node_name: "identity-1"
+      all_start_micros: 1486162184533805
+      op_start_rel_micros: 3
+      op_end_rel_micros: 9
+      all_end_rel_micros: 20
+      memory {
+        allocator_name: "gpu_bfc"
+      }
+      output {
+        tensor_description {
+          dtype: DT_FLOAT
+          shape {
+            dim {
+              size: 100
+            }
+          }
+          allocation_description {
+            requested_bytes: 400
+            allocated_bytes: 512
+            allocator_name: "gpu_bfc"
+            allocation_id: 3
+            ptr: 1108325959424
+          }
+        }
+      }
+      timeline_label: "identity-1 = Identity(stitch-0/_5)"
+      scheduled_micros: 1486162184533800
+    }
+    node_stats {
+      node_name: "stitch-1"
+      all_start_micros: 1486162184533952
+      op_start_rel_micros: 3
+      op_end_rel_micros: 19
+      all_end_rel_micros: 30
+      memory {
+        allocator_name: "gpu_bfc"
+      }
+      memory {
+        allocator_name: "cuda_host_bfc"
+        total_bytes: 512
+        peak_bytes: 512
+      }
+      output {
+        tensor_description {
+          dtype: DT_FLOAT
+          shape {
+            dim {
+              size: 100
+            }
+          }
+          allocation_description {
+            requested_bytes: 400
+            allocated_bytes: 512
+            allocator_name: "cuda_host_bfc"
+            allocation_id: 9
+            has_single_reference: true
+            ptr: 1120319571200
+          }
+        }
+      }
+      timeline_label: "stitch-1 = DynamicStitch(range, range, stitch-0, identity-1/_7)"
+      scheduled_micros: 1486162184533948
+    }
+    node_stats {
+      node_name: "identity-2"
+      all_start_micros: 1486162184534078
+      op_start_rel_micros: 3
+      op_end_rel_micros: 7
+      all_end_rel_micros: 16
+      memory {
+        allocator_name: "gpu_bfc"
+      }
+      output {
+        tensor_description {
+          dtype: DT_FLOAT
+          shape {
+            dim {
+              size: 100
+            }
+          }
+          allocation_description {
+            requested_bytes: 400
+            allocated_bytes: 512
+            allocator_name: "gpu_bfc"
+            allocation_id: 4
+            ptr: 1108325959424
+          }
+        }
+      }
+      timeline_label: "identity-2 = Identity(stitch-1/_9)"
+      scheduled_micros: 1486162184534073
+    }
+    node_stats {
+      node_name: "stitch-2"
+      all_start_micros: 1486162184534207
+      op_start_rel_micros: 3
+      op_end_rel_micros: 20
+      all_end_rel_micros: 28
+      memory {
+        allocator_name: "gpu_bfc"
+      }
+      memory {
+        allocator_name: "cuda_host_bfc"
+        total_bytes: 512
+        peak_bytes: 512
+      }
+      output {
+        tensor_description {
+          dtype: DT_FLOAT
+          shape {
+            dim {
+              size: 100
+            }
+          }
+          allocation_description {
+            requested_bytes: 400
+            allocated_bytes: 512
+            allocator_name: "cuda_host_bfc"
+            allocation_id: 11
+            has_single_reference: true
+            ptr: 1120319571712
+          }
+        }
+      }
+      timeline_label: "stitch-2 = DynamicStitch(range, range, stitch-1, identity-2/_11)"
+      scheduled_micros: 1486162184534204
+    }
+    node_stats {
+      node_name: "identity-3"
+      all_start_micros: 1486162184534325
+      op_start_rel_micros: 2
+      op_end_rel_micros: 7
+      all_end_rel_micros: 15
+      memory {
+        allocator_name: "gpu_bfc"
+      }
+      output {
+        tensor_description {
+          dtype: DT_FLOAT
+          shape {
+            dim {
+              size: 100
+            }
+          }
+          allocation_description {
+            requested_bytes: 400
+            allocated_bytes: 512
+            allocator_name: "gpu_bfc"
+            allocation_id: 5
+            ptr: 1108325959424
+          }
+        }
+      }
+      timeline_label: "identity-3 = Identity(stitch-2/_13)"
+      scheduled_micros: 1486162184534321
+    }
+    node_stats {
+      node_name: "stitch-3"
+      all_start_micros: 1486162184534446
+      op_start_rel_micros: 3
+      op_end_rel_micros: 24
+      all_end_rel_micros: 38
+      memory {
+        allocator_name: "gpu_bfc"
+      }
+      memory {
+        allocator_name: "cuda_host_bfc"
+        total_bytes: 512
+        peak_bytes: 512
+      }
+      output {
+        tensor_description {
+          dtype: DT_FLOAT
+          shape {
+            dim {
+              size: 100
+            }
+          }
+          allocation_description {
+            requested_bytes: 400
+            allocated_bytes: 512
+            allocator_name: "cuda_host_bfc"
+            allocation_id: 13
+            has_single_reference: true
+            ptr: 1120319571200
+          }
+        }
+      }
+      timeline_label: "stitch-3 = DynamicStitch(range, range, stitch-2, identity-3/_15)"
+      scheduled_micros: 1486162184534442
+    }
+    node_stats {
+      node_name: "identity-4"
+      all_start_micros: 1486162184534600
+      op_start_rel_micros: 4
+      op_end_rel_micros: 11
+      all_end_rel_micros: 23
+      memory {
+        allocator_name: "gpu_bfc"
+      }
+      output {
+        tensor_description {
+          dtype: DT_FLOAT
+          shape {
+            dim {
+              size: 100
+            }
+          }
+          allocation_description {
+            requested_bytes: 400
+            allocated_bytes: 512
+            allocator_name: "gpu_bfc"
+            allocation_id: 6
+            ptr: 1108325959424
+          }
+        }
+      }
+      timeline_label: "identity-4 = Identity(stitch-3/_17)"
+      scheduled_micros: 1486162184534594
+    }
+    node_stats {
+      node_name: "stitch-4"
+      all_start_micros: 1486162184534773
+      op_start_rel_micros: 4
+      op_end_rel_micros: 26
+      all_end_rel_micros: 38
+      memory {
+        allocator_name: "gpu_bfc"
+      }
+      memory {
+        allocator_name: "cuda_host_bfc"
+        total_bytes: 512
+        peak_bytes: 512
+      }
+      output {
+        tensor_description {
+          dtype: DT_FLOAT
+          shape {
+            dim {
+              size: 100
+            }
+          }
+          allocation_description {
+            requested_bytes: 400
+            allocated_bytes: 512
+            allocator_name: "cuda_host_bfc"
+            allocation_id: 15
+            has_single_reference: true
+            ptr: 1120319571712
+          }
+        }
+      }
+      timeline_label: "stitch-4 = DynamicStitch(range, range, stitch-3, identity-4/_19)"
+      scheduled_micros: 1486162184534768
+    }
+    node_stats {
+      node_name: "identity-5"
+      all_start_micros: 1486162184534903
+      op_start_rel_micros: 3
+      op_end_rel_micros: 9
+      all_end_rel_micros: 18
+      memory {
+        allocator_name: "gpu_bfc"
+      }
+      output {
+        tensor_description {
+          dtype: DT_FLOAT
+          shape {
+            dim {
+              size: 100
+            }
+          }
+          allocation_description {
+            requested_bytes: 400
+            allocated_bytes: 512
+            allocator_name: "gpu_bfc"
+            allocation_id: 7
+            ptr: 1108325959424
+          }
+        }
+      }
+      timeline_label: "identity-5 = Identity(stitch-4/_21)"
+      scheduled_micros: 1486162184534899
+    }
+    node_stats {
+      node_name: "stitch-5"
+      all_start_micros: 1486162184535024
+      op_start_rel_micros: 2
+      op_end_rel_micros: 17
+      all_end_rel_micros: 26
+      memory {
+        allocator_name: "gpu_bfc"
+      }
+      memory {
+        allocator_name: "cuda_host_bfc"
+        total_bytes: 512
+        peak_bytes: 512
+      }
+      output {
+        tensor_description {
+          dtype: DT_FLOAT
+          shape {
+            dim {
+              size: 100
+            }
+          }
+          allocation_description {
+            requested_bytes: 400
+            allocated_bytes: 512
+            allocator_name: "cuda_host_bfc"
+            allocation_id: 17
+            has_single_reference: true
+            ptr: 1120319571200
+          }
+        }
+      }
+      timeline_label: "stitch-5 = DynamicStitch(range, range, stitch-4, identity-5/_23)"
+      scheduled_micros: 1486162184535020
+    }
+    node_stats {
+      node_name: "identity-6"
+      all_start_micros: 1486162184535134
+      op_start_rel_micros: 2
+      op_end_rel_micros: 5
+      all_end_rel_micros: 12
+      memory {
+        allocator_name: "gpu_bfc"
+      }
+      output {
+        tensor_description {
+          dtype: DT_FLOAT
+          shape {
+            dim {
+              size: 100
+            }
+          }
+          allocation_description {
+            requested_bytes: 400
+            allocated_bytes: 512
+            allocator_name: "gpu_bfc"
+            allocation_id: 8
+            ptr: 1108325959424
+          }
+        }
+      }
+      timeline_label: "identity-6 = Identity(stitch-5/_25)"
+      scheduled_micros: 1486162184535130
+    }
+    node_stats {
+      node_name: "stitch-6"
+      all_start_micros: 1486162184535240
+      op_start_rel_micros: 2
+      op_end_rel_micros: 17
+      all_end_rel_micros: 26
+      memory {
+        allocator_name: "gpu_bfc"
+      }
+      memory {
+        allocator_name: "cuda_host_bfc"
+        total_bytes: 512
+        peak_bytes: 512
+      }
+      output {
+        tensor_description {
+          dtype: DT_FLOAT
+          shape {
+            dim {
+              size: 100
+            }
+          }
+          allocation_description {
+            requested_bytes: 400
+            allocated_bytes: 512
+            allocator_name: "cuda_host_bfc"
+            allocation_id: 19
+            has_single_reference: true
+            ptr: 1120319571712
+          }
+        }
+      }
+      timeline_label: "stitch-6 = DynamicStitch(range, range, stitch-5, identity-6/_27)"
+      scheduled_micros: 1486162184535236
+    }
+    node_stats {
+      node_name: "identity-7"
+      all_start_micros: 1486162184535346
+      op_start_rel_micros: 1
+      op_end_rel_micros: 4
+      all_end_rel_micros: 10
+      memory {
+        allocator_name: "gpu_bfc"
+      }
+      output {
+        tensor_description {
+          dtype: DT_FLOAT
+          shape {
+            dim {
+              size: 100
+            }
+          }
+          allocation_description {
+            requested_bytes: 400
+            allocated_bytes: 512
+            allocator_name: "gpu_bfc"
+            allocation_id: 9
+            ptr: 1108325959424
+          }
+        }
+      }
+      timeline_label: "identity-7 = Identity(stitch-6/_29)"
+      scheduled_micros: 1486162184535343
+    }
+    node_stats {
+      node_name: "stitch-7"
+      all_start_micros: 1486162184535436
+      op_start_rel_micros: 2
+      op_end_rel_micros: 15
+      all_end_rel_micros: 23
+      memory {
+        allocator_name: "gpu_bfc"
+      }
+      memory {
+        allocator_name: "cuda_host_bfc"
+        total_bytes: 512
+        peak_bytes: 512
+      }
+      output {
+        tensor_description {
+          dtype: DT_FLOAT
+          shape {
+            dim {
+              size: 100
+            }
+          }
+          allocation_description {
+            requested_bytes: 400
+            allocated_bytes: 512
+            allocator_name: "cuda_host_bfc"
+            allocation_id: 21
+            has_single_reference: true
+            ptr: 1120319571200
+          }
+        }
+      }
+      timeline_label: "stitch-7 = DynamicStitch(range, range, stitch-6, identity-7/_31)"
+      scheduled_micros: 1486162184535434
+    }
+    node_stats {
+      node_name: "identity-8"
+      all_start_micros: 1486162184535536
+      op_start_rel_micros: 2
+      op_end_rel_micros: 4
+      all_end_rel_micros: 10
+      memory {
+        allocator_name: "gpu_bfc"
+      }
+      output {
+        tensor_description {
+          dtype: DT_FLOAT
+          shape {
+            dim {
+              size: 100
+            }
+          }
+          allocation_description {
+            requested_bytes: 400
+            allocated_bytes: 512
+            allocator_name: "gpu_bfc"
+            allocation_id: 10
+            ptr: 1108325959424
+          }
+        }
+      }
+      timeline_label: "identity-8 = Identity(stitch-7/_33)"
+      scheduled_micros: 1486162184535534
+    }
+    node_stats {
+      node_name: "stitch-8"
+      all_start_micros: 1486162184535627
+      op_start_rel_micros: 1
+      op_end_rel_micros: 15
+      all_end_rel_micros: 23
+      memory {
+        allocator_name: "gpu_bfc"
+      }
+      memory {
+        allocator_name: "cuda_host_bfc"
+        total_bytes: 512
+        peak_bytes: 512
+      }
+      output {
+        tensor_description {
+          dtype: DT_FLOAT
+          shape {
+            dim {
+              size: 100
+            }
+          }
+          allocation_description {
+            requested_bytes: 400
+            allocated_bytes: 512
+            allocator_name: "cuda_host_bfc"
+            allocation_id: 23
+            has_single_reference: true
+            ptr: 1120319571712
+          }
+        }
+      }
+      timeline_label: "stitch-8 = DynamicStitch(range, range, stitch-7, identity-8/_35)"
+      scheduled_micros: 1486162184535625
+    }
+    node_stats {
+      node_name: "identity-9"
+      all_start_micros: 1486162184535725
+      op_start_rel_micros: 2
+      op_end_rel_micros: 5
+      all_end_rel_micros: 11
+      memory {
+        allocator_name: "gpu_bfc"
+      }
+      output {
+        tensor_description {
+          dtype: DT_FLOAT
+          shape {
+            dim {
+              size: 100
+            }
+          }
+          allocation_description {
+            requested_bytes: 400
+            allocated_bytes: 512
+            allocator_name: "gpu_bfc"
+            allocation_id: 11
+            ptr: 1108325959424
+          }
+        }
+      }
+      timeline_label: "identity-9 = Identity(stitch-8/_37)"
+      scheduled_micros: 1486162184535723
+    }
+    node_stats {
+      node_name: "stitch-9"
+      all_start_micros: 1486162184535882
+      op_start_rel_micros: 2
+      op_end_rel_micros: 20
+      all_end_rel_micros: 32
+      memory {
+        allocator_name: "gpu_bfc"
+      }
+      memory {
+        allocator_name: "cpu_pool"
+        total_bytes: 400
+      }
+      output {
+        tensor_description {
+          dtype: DT_FLOAT
+          shape {
+            dim {
+              size: 100
+            }
+          }
+          allocation_description {
+            requested_bytes: 400
+            allocator_name: "cpu_pool"
+            ptr: 140413136625696
+          }
+        }
+      }
+      timeline_label: "stitch-9 = DynamicStitch(range, range, stitch-8, identity-9/_39)"
+      scheduled_micros: 1486162184535878
+    }
+  }
+  dev_stats {
+    device: "/gpu:0/memcpy"
+    node_stats {
+      node_name: "edge_9_x:MEMCPYDtoH"
+      all_start_micros: 1486162184532468
+      op_end_rel_micros: 2
+      all_end_rel_micros: 2
+      timeline_label: "MEMCPYDtoH 400 bytes (Device to Pinned)"
+    }
+    node_stats {
+      node_name: "edge_10_identity-0:MEMCPYDtoH"
+      all_start_micros: 1486162184533568
+      op_end_rel_micros: 1
+      all_end_rel_micros: 1
+      timeline_label: "MEMCPYDtoH 400 bytes (Device to Pinned)"
+    }
+    node_stats {
+      node_name: "edge_11_stitch-0:MEMCPYHtoD"
+      all_start_micros: 1486162184533767
+      op_end_rel_micros: 1
+      all_end_rel_micros: 1
+      timeline_label: "MEMCPYHtoD 400 bytes (Pinned to Device)"
+    }
+    node_stats {
+      node_name: "edge_15_identity-1:MEMCPYDtoH"
+      all_start_micros: 1486162184533906
+      op_end_rel_micros: 1
+      all_end_rel_micros: 1
+      timeline_label: "MEMCPYDtoH 400 bytes (Device to Pinned)"
+    }
+    node_stats {
+      node_name: "edge_16_stitch-1:MEMCPYHtoD"
+      all_start_micros: 1486162184534040
+      op_end_rel_micros: 1
+      all_end_rel_micros: 1
+      timeline_label: "MEMCPYHtoD 400 bytes (Pinned to Device)"
+    }
+    node_stats {
+      node_name: "edge_20_identity-2:MEMCPYDtoH"
+      all_start_micros: 1486162184534165
+      op_end_rel_micros: 1
+      all_end_rel_micros: 1
+      timeline_label: "MEMCPYDtoH 400 bytes (Device to Pinned)"
+    }
+    node_stats {
+      node_name: "edge_21_stitch-2:MEMCPYHtoD"
+      all_start_micros: 1486162184534290
+      op_end_rel_micros: 1
+      all_end_rel_micros: 1
+      timeline_label: "MEMCPYHtoD 400 bytes (Pinned to Device)"
+    }
+    node_stats {
+      node_name: "edge_25_identity-3:MEMCPYDtoH"
+      all_start_micros: 1486162184534409
+      op_end_rel_micros: 1
+      all_end_rel_micros: 1
+      timeline_label: "MEMCPYDtoH 400 bytes (Device to Pinned)"
+    }
+    node_stats {
+      node_name: "edge_26_stitch-3:MEMCPYHtoD"
+      all_start_micros: 1486162184534564
+      op_end_rel_micros: 1
+      all_end_rel_micros: 1
+      timeline_label: "MEMCPYHtoD 400 bytes (Pinned to Device)"
+    }
+    node_stats {
+      node_name: "edge_30_identity-4:MEMCPYDtoH"
+      all_start_micros: 1486162184534721
+      op_end_rel_micros: 1
+      all_end_rel_micros: 1
+      timeline_label: "MEMCPYDtoH 400 bytes (Device to Pinned)"
+    }
+    node_stats {
+      node_name: "edge_31_stitch-4:MEMCPYHtoD"
+      all_start_micros: 1486162184534872
+      op_end_rel_micros: 1
+      all_end_rel_micros: 1
+      timeline_label: "MEMCPYHtoD 400 bytes (Pinned to Device)"
+    }
+    node_stats {
+      node_name: "edge_35_identity-5:MEMCPYDtoH"
+      all_start_micros: 1486162184534987
+      op_end_rel_micros: 1
+      all_end_rel_micros: 1
+      timeline_label: "MEMCPYDtoH 400 bytes (Device to Pinned)"
+    }
+    node_stats {
+      node_name: "edge_36_stitch-5:MEMCPYHtoD"
+      all_start_micros: 1486162184535104
+      op_end_rel_micros: 1
+      all_end_rel_micros: 1
+      timeline_label: "MEMCPYHtoD 400 bytes (Pinned to Device)"
+    }
+    node_stats {
+      node_name: "edge_40_identity-6:MEMCPYDtoH"
+      all_start_micros: 1486162184535206
+      op_end_rel_micros: 1
+      all_end_rel_micros: 1
+      timeline_label: "MEMCPYDtoH 400 bytes (Device to Pinned)"
+    }
+    node_stats {
+      node_name: "edge_41_stitch-6:MEMCPYHtoD"
+      all_start_micros: 1486162184535318
+      op_end_rel_micros: 1
+      all_end_rel_micros: 1
+      timeline_label: "MEMCPYHtoD 400 bytes (Pinned to Device)"
+    }
+    node_stats {
+      node_name: "edge_45_identity-7:MEMCPYDtoH"
+      all_start_micros: 1486162184535409
+      op_end_rel_micros: 1
+      all_end_rel_micros: 1
+      timeline_label: "MEMCPYDtoH 400 bytes (Device to Pinned)"
+    }
+    node_stats {
+      node_name: "edge_46_stitch-7:MEMCPYHtoD"
+      all_start_micros: 1486162184535509
+      op_end_rel_micros: 1
+      all_end_rel_micros: 1
+      timeline_label: "MEMCPYHtoD 400 bytes (Pinned to Device)"
+    }
+    node_stats {
+      node_name: "edge_50_identity-8:MEMCPYDtoH"
+      all_start_micros: 1486162184535601
+      op_end_rel_micros: 1
+      all_end_rel_micros: 1
+      timeline_label: "MEMCPYDtoH 400 bytes (Device to Pinned)"
+    }
+    node_stats {
+      node_name: "edge_51_stitch-8:MEMCPYHtoD"
+      all_start_micros: 1486162184535699
+      op_end_rel_micros: 1
+      all_end_rel_micros: 1
+      timeline_label: "MEMCPYHtoD 400 bytes (Pinned to Device)"
+    }
+    node_stats {
+      node_name: "edge_55_identity-9:MEMCPYDtoH"
+      all_start_micros: 1486162184535816
+      op_end_rel_micros: 1
+      all_end_rel_micros: 1
+      timeline_label: "MEMCPYDtoH 400 bytes (Device to Pinned)"
+    }
+  }
+  dev_stats {
+    device: "/gpu:0/stream:14"
+    node_stats {
+      node_name: "edge_9_x:MEMCPYDtoH"
+      all_start_micros: 1486162184532468
+      op_end_rel_micros: 2
+      all_end_rel_micros: 2
+      timeline_label: "MEMCPYDtoH 400 bytes (Device to Pinned)"
+    }
+    node_stats {
+      node_name: "edge_10_identity-0:MEMCPYDtoH"
+      all_start_micros: 1486162184533568
+      op_end_rel_micros: 1
+      all_end_rel_micros: 1
+      timeline_label: "MEMCPYDtoH 400 bytes (Device to Pinned)"
+    }
+    node_stats {
+      node_name: "edge_15_identity-1:MEMCPYDtoH"
+      all_start_micros: 1486162184533906
+      op_end_rel_micros: 1
+      all_end_rel_micros: 1
+      timeline_label: "MEMCPYDtoH 400 bytes (Device to Pinned)"
+    }
+    node_stats {
+      node_name: "edge_20_identity-2:MEMCPYDtoH"
+      all_start_micros: 1486162184534165
+      op_end_rel_micros: 1
+      all_end_rel_micros: 1
+      timeline_label: "MEMCPYDtoH 400 bytes (Device to Pinned)"
+    }
+    node_stats {
+      node_name: "edge_25_identity-3:MEMCPYDtoH"
+      all_start_micros: 1486162184534409
+      op_end_rel_micros: 1
+      all_end_rel_micros: 1
+      timeline_label: "MEMCPYDtoH 400 bytes (Device to Pinned)"
+    }
+    node_stats {
+      node_name: "edge_30_identity-4:MEMCPYDtoH"
+      all_start_micros: 1486162184534721
+      op_end_rel_micros: 1
+      all_end_rel_micros: 1
+      timeline_label: "MEMCPYDtoH 400 bytes (Device to Pinned)"
+    }
+    node_stats {
+      node_name: "edge_35_identity-5:MEMCPYDtoH"
+      all_start_micros: 1486162184534987
+      op_end_rel_micros: 1
+      all_end_rel_micros: 1
+      timeline_label: "MEMCPYDtoH 400 bytes (Device to Pinned)"
+    }
+    node_stats {
+      node_name: "edge_40_identity-6:MEMCPYDtoH"
+      all_start_micros: 1486162184535206
+      op_end_rel_micros: 1
+      all_end_rel_micros: 1
+      timeline_label: "MEMCPYDtoH 400 bytes (Device to Pinned)"
+    }
+    node_stats {
+      node_name: "edge_45_identity-7:MEMCPYDtoH"
+      all_start_micros: 1486162184535409
+      op_end_rel_micros: 1
+      all_end_rel_micros: 1
+      timeline_label: "MEMCPYDtoH 400 bytes (Device to Pinned)"
+    }
+    node_stats {
+      node_name: "edge_50_identity-8:MEMCPYDtoH"
+      all_start_micros: 1486162184535601
+      op_end_rel_micros: 1
+      all_end_rel_micros: 1
+      timeline_label: "MEMCPYDtoH 400 bytes (Device to Pinned)"
+    }
+    node_stats {
+      node_name: "edge_55_identity-9:MEMCPYDtoH"
+      all_start_micros: 1486162184535816
+      op_end_rel_micros: 1
+      all_end_rel_micros: 1
+      timeline_label: "MEMCPYDtoH 400 bytes (Device to Pinned)"
+    }
+  }
+  dev_stats {
+    device: "/gpu:0/stream:13"
+    node_stats {
+      node_name: "edge_11_stitch-0:MEMCPYHtoD"
+      all_start_micros: 1486162184533767
+      op_end_rel_micros: 1
+      all_end_rel_micros: 1
+      timeline_label: "MEMCPYHtoD 400 bytes (Pinned to Device)"
+    }
+    node_stats {
+      node_name: "edge_16_stitch-1:MEMCPYHtoD"
+      all_start_micros: 1486162184534040
+      op_end_rel_micros: 1
+      all_end_rel_micros: 1
+      timeline_label: "MEMCPYHtoD 400 bytes (Pinned to Device)"
+    }
+    node_stats {
+      node_name: "edge_21_stitch-2:MEMCPYHtoD"
+      all_start_micros: 1486162184534290
+      op_end_rel_micros: 1
+      all_end_rel_micros: 1
+      timeline_label: "MEMCPYHtoD 400 bytes (Pinned to Device)"
+    }
+    node_stats {
+      node_name: "edge_26_stitch-3:MEMCPYHtoD"
+      all_start_micros: 1486162184534564
+      op_end_rel_micros: 1
+      all_end_rel_micros: 1
+      timeline_label: "MEMCPYHtoD 400 bytes (Pinned to Device)"
+    }
+    node_stats {
+      node_name: "edge_31_stitch-4:MEMCPYHtoD"
+      all_start_micros: 1486162184534872
+      op_end_rel_micros: 1
+      all_end_rel_micros: 1
+      timeline_label: "MEMCPYHtoD 400 bytes (Pinned to Device)"
+    }
+    node_stats {
+      node_name: "edge_36_stitch-5:MEMCPYHtoD"
+      all_start_micros: 1486162184535104
+      op_end_rel_micros: 1
+      all_end_rel_micros: 1
+      timeline_label: "MEMCPYHtoD 400 bytes (Pinned to Device)"
+    }
+    node_stats {
+      node_name: "edge_41_stitch-6:MEMCPYHtoD"
+      all_start_micros: 1486162184535318
+      op_end_rel_micros: 1
+      all_end_rel_micros: 1
+      timeline_label: "MEMCPYHtoD 400 bytes (Pinned to Device)"
+    }
+    node_stats {
+      node_name: "edge_46_stitch-7:MEMCPYHtoD"
+      all_start_micros: 1486162184535509
+      op_end_rel_micros: 1
+      all_end_rel_micros: 1
+      timeline_label: "MEMCPYHtoD 400 bytes (Pinned to Device)"
+    }
+    node_stats {
+      node_name: "edge_51_stitch-8:MEMCPYHtoD"
+      all_start_micros: 1486162184535699
+      op_end_rel_micros: 1
+      all_end_rel_micros: 1
+      timeline_label: "MEMCPYHtoD 400 bytes (Pinned to Device)"
+    }
+  }
+}
+partition_graphs {
+  node {
+    name: "x"
+    op: "Const"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "dtype"
+      value {
+        type: DT_FLOAT
+      }
+    }
+    attr {
+      key: "value"
+      value {
+        tensor {
+          dtype: DT_FLOAT
+          tensor_shape {
+            dim {
+              size: 100
+            }
+          }
+          float_val: 1.0
+        }
+      }
+    }
+  }
+  node {
+    name: "x/_0"
+    op: "_Send"
+    input: "x"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+    attr {
+      key: "client_terminated"
+      value {
+        b: false
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: 1
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "edge_9_x"
+      }
+    }
+  }
+  node {
+    name: "x/_1"
+    op: "_HostRecv"
+    input: "^x/_0"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "client_terminated"
+      value {
+        b: false
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: 1
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "edge_9_x"
+      }
+    }
+    attr {
+      key: "tensor_type"
+      value {
+        type: DT_FLOAT
+      }
+    }
+  }
+  node {
+    name: "identity-0"
+    op: "Identity"
+    input: "x"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+  }
+  node {
+    name: "identity-0/_2"
+    op: "_Send"
+    input: "identity-0"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+    attr {
+      key: "client_terminated"
+      value {
+        b: false
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: 1
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "edge_10_identity-0"
+      }
+    }
+  }
+  node {
+    name: "identity-0/_3"
+    op: "_HostRecv"
+    input: "^identity-0/_2"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "client_terminated"
+      value {
+        b: false
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: 1
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "edge_10_identity-0"
+      }
+    }
+    attr {
+      key: "tensor_type"
+      value {
+        type: DT_FLOAT
+      }
+    }
+  }
+  node {
+    name: "range/start"
+    op: "Const"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "dtype"
+      value {
+        type: DT_INT32
+      }
+    }
+    attr {
+      key: "value"
+      value {
+        tensor {
+          dtype: DT_INT32
+          tensor_shape {
+          }
+          int_val: 0
+        }
+      }
+    }
+  }
+  node {
+    name: "range/limit"
+    op: "Const"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "dtype"
+      value {
+        type: DT_INT32
+      }
+    }
+    attr {
+      key: "value"
+      value {
+        tensor {
+          dtype: DT_INT32
+          tensor_shape {
+          }
+          int_val: 100
+        }
+      }
+    }
+  }
+  node {
+    name: "range/delta"
+    op: "Const"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "dtype"
+      value {
+        type: DT_INT32
+      }
+    }
+    attr {
+      key: "value"
+      value {
+        tensor {
+          dtype: DT_INT32
+          tensor_shape {
+          }
+          int_val: 1
+        }
+      }
+    }
+  }
+  node {
+    name: "range"
+    op: "Range"
+    input: "range/start"
+    input: "range/limit"
+    input: "range/delta"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "Tidx"
+      value {
+        type: DT_INT32
+      }
+    }
+  }
+  node {
+    name: "stitch-0"
+    op: "DynamicStitch"
+    input: "range"
+    input: "range"
+    input: "x/_1"
+    input: "identity-0/_3"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "N"
+      value {
+        i: 2
+      }
+    }
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+  }
+  node {
+    name: "stitch-0/_4"
+    op: "_HostSend"
+    input: "stitch-0"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+    attr {
+      key: "client_terminated"
+      value {
+        b: false
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: 1
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "edge_11_stitch-0"
+      }
+    }
+  }
+  node {
+    name: "stitch-0/_5"
+    op: "_Recv"
+    input: "^stitch-0/_4"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "client_terminated"
+      value {
+        b: false
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: 1
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "edge_11_stitch-0"
+      }
+    }
+    attr {
+      key: "tensor_type"
+      value {
+        type: DT_FLOAT
+      }
+    }
+  }
+  node {
+    name: "identity-1"
+    op: "Identity"
+    input: "stitch-0/_5"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+  }
+  node {
+    name: "identity-1/_6"
+    op: "_Send"
+    input: "identity-1"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+    attr {
+      key: "client_terminated"
+      value {
+        b: false
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: 1
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "edge_15_identity-1"
+      }
+    }
+  }
+  node {
+    name: "identity-1/_7"
+    op: "_HostRecv"
+    input: "^identity-1/_6"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "client_terminated"
+      value {
+        b: false
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: 1
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "edge_15_identity-1"
+      }
+    }
+    attr {
+      key: "tensor_type"
+      value {
+        type: DT_FLOAT
+      }
+    }
+  }
+  node {
+    name: "stitch-1"
+    op: "DynamicStitch"
+    input: "range"
+    input: "range"
+    input: "stitch-0"
+    input: "identity-1/_7"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "N"
+      value {
+        i: 2
+      }
+    }
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+  }
+  node {
+    name: "stitch-1/_8"
+    op: "_HostSend"
+    input: "stitch-1"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+    attr {
+      key: "client_terminated"
+      value {
+        b: false
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: 1
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "edge_16_stitch-1"
+      }
+    }
+  }
+  node {
+    name: "stitch-1/_9"
+    op: "_Recv"
+    input: "^stitch-1/_8"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "client_terminated"
+      value {
+        b: false
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: 1
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "edge_16_stitch-1"
+      }
+    }
+    attr {
+      key: "tensor_type"
+      value {
+        type: DT_FLOAT
+      }
+    }
+  }
+  node {
+    name: "identity-2"
+    op: "Identity"
+    input: "stitch-1/_9"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+  }
+  node {
+    name: "identity-2/_10"
+    op: "_Send"
+    input: "identity-2"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+    attr {
+      key: "client_terminated"
+      value {
+        b: false
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: 1
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "edge_20_identity-2"
+      }
+    }
+  }
+  node {
+    name: "identity-2/_11"
+    op: "_HostRecv"
+    input: "^identity-2/_10"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "client_terminated"
+      value {
+        b: false
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: 1
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "edge_20_identity-2"
+      }
+    }
+    attr {
+      key: "tensor_type"
+      value {
+        type: DT_FLOAT
+      }
+    }
+  }
+  node {
+    name: "stitch-2"
+    op: "DynamicStitch"
+    input: "range"
+    input: "range"
+    input: "stitch-1"
+    input: "identity-2/_11"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "N"
+      value {
+        i: 2
+      }
+    }
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+  }
+  node {
+    name: "stitch-2/_12"
+    op: "_HostSend"
+    input: "stitch-2"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+    attr {
+      key: "client_terminated"
+      value {
+        b: false
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: 1
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "edge_21_stitch-2"
+      }
+    }
+  }
+  node {
+    name: "stitch-2/_13"
+    op: "_Recv"
+    input: "^stitch-2/_12"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "client_terminated"
+      value {
+        b: false
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: 1
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "edge_21_stitch-2"
+      }
+    }
+    attr {
+      key: "tensor_type"
+      value {
+        type: DT_FLOAT
+      }
+    }
+  }
+  node {
+    name: "identity-3"
+    op: "Identity"
+    input: "stitch-2/_13"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+  }
+  node {
+    name: "identity-3/_14"
+    op: "_Send"
+    input: "identity-3"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+    attr {
+      key: "client_terminated"
+      value {
+        b: false
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: 1
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "edge_25_identity-3"
+      }
+    }
+  }
+  node {
+    name: "identity-3/_15"
+    op: "_HostRecv"
+    input: "^identity-3/_14"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "client_terminated"
+      value {
+        b: false
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: 1
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "edge_25_identity-3"
+      }
+    }
+    attr {
+      key: "tensor_type"
+      value {
+        type: DT_FLOAT
+      }
+    }
+  }
+  node {
+    name: "stitch-3"
+    op: "DynamicStitch"
+    input: "range"
+    input: "range"
+    input: "stitch-2"
+    input: "identity-3/_15"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "N"
+      value {
+        i: 2
+      }
+    }
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+  }
+  node {
+    name: "stitch-3/_16"
+    op: "_HostSend"
+    input: "stitch-3"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+    attr {
+      key: "client_terminated"
+      value {
+        b: false
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: 1
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "edge_26_stitch-3"
+      }
+    }
+  }
+  node {
+    name: "stitch-3/_17"
+    op: "_Recv"
+    input: "^stitch-3/_16"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "client_terminated"
+      value {
+        b: false
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: 1
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "edge_26_stitch-3"
+      }
+    }
+    attr {
+      key: "tensor_type"
+      value {
+        type: DT_FLOAT
+      }
+    }
+  }
+  node {
+    name: "identity-4"
+    op: "Identity"
+    input: "stitch-3/_17"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+  }
+  node {
+    name: "identity-4/_18"
+    op: "_Send"
+    input: "identity-4"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+    attr {
+      key: "client_terminated"
+      value {
+        b: false
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: 1
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "edge_30_identity-4"
+      }
+    }
+  }
+  node {
+    name: "identity-4/_19"
+    op: "_HostRecv"
+    input: "^identity-4/_18"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "client_terminated"
+      value {
+        b: false
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: 1
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "edge_30_identity-4"
+      }
+    }
+    attr {
+      key: "tensor_type"
+      value {
+        type: DT_FLOAT
+      }
+    }
+  }
+  node {
+    name: "stitch-4"
+    op: "DynamicStitch"
+    input: "range"
+    input: "range"
+    input: "stitch-3"
+    input: "identity-4/_19"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "N"
+      value {
+        i: 2
+      }
+    }
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+  }
+  node {
+    name: "stitch-4/_20"
+    op: "_HostSend"
+    input: "stitch-4"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+    attr {
+      key: "client_terminated"
+      value {
+        b: false
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: 1
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "edge_31_stitch-4"
+      }
+    }
+  }
+  node {
+    name: "stitch-4/_21"
+    op: "_Recv"
+    input: "^stitch-4/_20"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "client_terminated"
+      value {
+        b: false
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: 1
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "edge_31_stitch-4"
+      }
+    }
+    attr {
+      key: "tensor_type"
+      value {
+        type: DT_FLOAT
+      }
+    }
+  }
+  node {
+    name: "identity-5"
+    op: "Identity"
+    input: "stitch-4/_21"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+  }
+  node {
+    name: "identity-5/_22"
+    op: "_Send"
+    input: "identity-5"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+    attr {
+      key: "client_terminated"
+      value {
+        b: false
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: 1
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "edge_35_identity-5"
+      }
+    }
+  }
+  node {
+    name: "identity-5/_23"
+    op: "_HostRecv"
+    input: "^identity-5/_22"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "client_terminated"
+      value {
+        b: false
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: 1
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "edge_35_identity-5"
+      }
+    }
+    attr {
+      key: "tensor_type"
+      value {
+        type: DT_FLOAT
+      }
+    }
+  }
+  node {
+    name: "stitch-5"
+    op: "DynamicStitch"
+    input: "range"
+    input: "range"
+    input: "stitch-4"
+    input: "identity-5/_23"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "N"
+      value {
+        i: 2
+      }
+    }
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+  }
+  node {
+    name: "stitch-5/_24"
+    op: "_HostSend"
+    input: "stitch-5"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+    attr {
+      key: "client_terminated"
+      value {
+        b: false
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: 1
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "edge_36_stitch-5"
+      }
+    }
+  }
+  node {
+    name: "stitch-5/_25"
+    op: "_Recv"
+    input: "^stitch-5/_24"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "client_terminated"
+      value {
+        b: false
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: 1
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "edge_36_stitch-5"
+      }
+    }
+    attr {
+      key: "tensor_type"
+      value {
+        type: DT_FLOAT
+      }
+    }
+  }
+  node {
+    name: "identity-6"
+    op: "Identity"
+    input: "stitch-5/_25"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+  }
+  node {
+    name: "identity-6/_26"
+    op: "_Send"
+    input: "identity-6"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+    attr {
+      key: "client_terminated"
+      value {
+        b: false
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: 1
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "edge_40_identity-6"
+      }
+    }
+  }
+  node {
+    name: "identity-6/_27"
+    op: "_HostRecv"
+    input: "^identity-6/_26"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "client_terminated"
+      value {
+        b: false
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: 1
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "edge_40_identity-6"
+      }
+    }
+    attr {
+      key: "tensor_type"
+      value {
+        type: DT_FLOAT
+      }
+    }
+  }
+  node {
+    name: "stitch-6"
+    op: "DynamicStitch"
+    input: "range"
+    input: "range"
+    input: "stitch-5"
+    input: "identity-6/_27"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "N"
+      value {
+        i: 2
+      }
+    }
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+  }
+  node {
+    name: "stitch-6/_28"
+    op: "_HostSend"
+    input: "stitch-6"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+    attr {
+      key: "client_terminated"
+      value {
+        b: false
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: 1
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "edge_41_stitch-6"
+      }
+    }
+  }
+  node {
+    name: "stitch-6/_29"
+    op: "_Recv"
+    input: "^stitch-6/_28"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "client_terminated"
+      value {
+        b: false
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: 1
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "edge_41_stitch-6"
+      }
+    }
+    attr {
+      key: "tensor_type"
+      value {
+        type: DT_FLOAT
+      }
+    }
+  }
+  node {
+    name: "identity-7"
+    op: "Identity"
+    input: "stitch-6/_29"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+  }
+  node {
+    name: "identity-7/_30"
+    op: "_Send"
+    input: "identity-7"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+    attr {
+      key: "client_terminated"
+      value {
+        b: false
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: 1
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "edge_45_identity-7"
+      }
+    }
+  }
+  node {
+    name: "identity-7/_31"
+    op: "_HostRecv"
+    input: "^identity-7/_30"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "client_terminated"
+      value {
+        b: false
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: 1
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "edge_45_identity-7"
+      }
+    }
+    attr {
+      key: "tensor_type"
+      value {
+        type: DT_FLOAT
+      }
+    }
+  }
+  node {
+    name: "stitch-7"
+    op: "DynamicStitch"
+    input: "range"
+    input: "range"
+    input: "stitch-6"
+    input: "identity-7/_31"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "N"
+      value {
+        i: 2
+      }
+    }
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+  }
+  node {
+    name: "stitch-7/_32"
+    op: "_HostSend"
+    input: "stitch-7"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+    attr {
+      key: "client_terminated"
+      value {
+        b: false
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: 1
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "edge_46_stitch-7"
+      }
+    }
+  }
+  node {
+    name: "stitch-7/_33"
+    op: "_Recv"
+    input: "^stitch-7/_32"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "client_terminated"
+      value {
+        b: false
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: 1
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "edge_46_stitch-7"
+      }
+    }
+    attr {
+      key: "tensor_type"
+      value {
+        type: DT_FLOAT
+      }
+    }
+  }
+  node {
+    name: "identity-8"
+    op: "Identity"
+    input: "stitch-7/_33"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+  }
+  node {
+    name: "identity-8/_34"
+    op: "_Send"
+    input: "identity-8"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+    attr {
+      key: "client_terminated"
+      value {
+        b: false
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: 1
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "edge_50_identity-8"
+      }
+    }
+  }
+  node {
+    name: "identity-8/_35"
+    op: "_HostRecv"
+    input: "^identity-8/_34"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "client_terminated"
+      value {
+        b: false
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: 1
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "edge_50_identity-8"
+      }
+    }
+    attr {
+      key: "tensor_type"
+      value {
+        type: DT_FLOAT
+      }
+    }
+  }
+  node {
+    name: "stitch-8"
+    op: "DynamicStitch"
+    input: "range"
+    input: "range"
+    input: "stitch-7"
+    input: "identity-8/_35"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "N"
+      value {
+        i: 2
+      }
+    }
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+  }
+  node {
+    name: "stitch-8/_36"
+    op: "_HostSend"
+    input: "stitch-8"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+    attr {
+      key: "client_terminated"
+      value {
+        b: false
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: 1
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "edge_51_stitch-8"
+      }
+    }
+  }
+  node {
+    name: "stitch-8/_37"
+    op: "_Recv"
+    input: "^stitch-8/_36"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "client_terminated"
+      value {
+        b: false
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: 1
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "edge_51_stitch-8"
+      }
+    }
+    attr {
+      key: "tensor_type"
+      value {
+        type: DT_FLOAT
+      }
+    }
+  }
+  node {
+    name: "identity-9"
+    op: "Identity"
+    input: "stitch-8/_37"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+  }
+  node {
+    name: "identity-9/_38"
+    op: "_Send"
+    input: "identity-9"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+    attr {
+      key: "client_terminated"
+      value {
+        b: false
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: 1
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "edge_55_identity-9"
+      }
+    }
+  }
+  node {
+    name: "identity-9/_39"
+    op: "_HostRecv"
+    input: "^identity-9/_38"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "client_terminated"
+      value {
+        b: false
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: 1
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "edge_55_identity-9"
+      }
+    }
+    attr {
+      key: "tensor_type"
+      value {
+        type: DT_FLOAT
+      }
+    }
+  }
+  node {
+    name: "stitch-9"
+    op: "DynamicStitch"
+    input: "range"
+    input: "range"
+    input: "stitch-8"
+    input: "identity-9/_39"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "N"
+      value {
+        i: 2
+      }
+    }
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+  }
+  node {
+    name: "stitch-9/_40"
+    op: "_HostSend"
+    input: "stitch-9"
+    device: "/job:localhost/replica:0/task:0/gpu:0"
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+    attr {
+      key: "client_terminated"
+      value {
+        b: false
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/cpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: 1
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "edge_61_stitch-9"
+      }
+    }
+  }
+  versions {
+    producer: 21
+  }
+}
+partition_graphs {
+  node {
+    name: "stitch-9/_41"
+    op: "_Recv"
+    device: "/job:localhost/replica:0/task:0/cpu:0"
+    attr {
+      key: "client_terminated"
+      value {
+        b: false
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/cpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/gpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: 1
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "edge_61_stitch-9"
+      }
+    }
+    attr {
+      key: "tensor_type"
+      value {
+        type: DT_FLOAT
+      }
+    }
+  }
+  node {
+    name: "_send_stitch-9_0"
+    op: "_Send"
+    input: "stitch-9/_41"
+    device: "/job:localhost/replica:0/task:0/cpu:0"
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+    attr {
+      key: "client_terminated"
+      value {
+        b: true
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/cpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/cpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: 6194878103004924795
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "stitch-9:0"
+      }
+    }
+  }
+  versions {
+    producer: 21
+  }
+}
