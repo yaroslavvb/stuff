@@ -1,4 +1,4 @@
-# utility to force a single execution order on TensorFlow graph
+# utility to force a memory-efficient execution order on TensorFlow graph
 
 import tensorflow as tf
 import tensorflow.contrib.graph_editor as ge
