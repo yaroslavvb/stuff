@@ -1,4 +1,5 @@
 import tensorflow as tf
+from tensorflow.python.client import timeline
 
 
 class Queue(tf.FIFOQueue):
@@ -46,12 +47,25 @@ queue = Queue(10, [tf.int32], [()])
 queue_peek = queue.peek()[0]
 queue_init = queue.enqueue([tf.constant(1)])
 
-for _ in range(10):
+for i in range(10):
   sess = tf.Session()
   sess.run(tf.global_variables_initializer())
   sess.run(queue_init)
 
-  print(sess.run(queue_peek), end=' ')
+  run_options = tf.RunOptions(trace_level=tf.RunOptions.FULL_TRACE)
+  run_options.output_partition_graphs = True
+  run_metadata = tf.RunMetadata()
+  result = sess.run(queue_peek, run_metadata=run_metadata,
+                    options=run_options)
+
+  tl = timeline.Timeline(run_metadata.step_stats)
+  ctf = tl.generate_chrome_trace_format()
+  with open('timeline-%d.json'%(i,), 'w') as f:
+    f.write(ctf)
+  with open('stepstats-%d.json'%(i,), 'w') as f:
+    f.write(str(run_metadata))
+
+  print(result, end=' ')
   
 # Expected: 1 1 1 1 1 1 1 1 1 1
 # Actual: 0 1 0 0 1 1 0 0 0 1
