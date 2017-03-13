@@ -4,7 +4,7 @@ import config
 import numpy as np
 import tensorflow as tf
 from tensorflow.python.ops import array_ops
- 
+from tensorflow.python.client import timeline 
  
 def retrieve_seq_length_op2(data):
     return tf.reduce_sum(tf.cast(tf.greater(data, tf.zeros_like(data)), tf.int32), 1)
@@ -198,7 +198,15 @@ def main(args):
         num_samples_in_queue = sess.run(q_size)
         logging.info('%d left in queue' % num_samples_in_queue)
         logging.info('elapsed time %.2f(s)' % (end_time - begin_time))
- 
+
+        with open('stepstats-%d.json'%(idx,), 'w') as f:
+            f.write(str(run_metadata))
+
+        tl = timeline.Timeline(run_metadata.step_stats)
+        ctf = tl.generate_chrome_trace_format()
+        with open('timeline-%d.json'%(idx,), 'w') as f:
+            f.write(ctf)
+        
     writer.close()
     logging.info('-' * 50)
     logging.info('Close TensorFlow session..')

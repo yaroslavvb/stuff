@@ -4,57 +4,60 @@ from tensorflow.python.client import timeline
 
 class Queue(tf.FIFOQueue):
 
-  def __init__(self, capacity, dtypes, shapes):
-    super().__init__(capacity - 1, dtypes, shapes)
-    self._first = [
-        tf.Variable(tf.zeros(s, d), dtype=d, expected_shape=s)
-        for s, d in zip(shapes, dtypes)]
-    self._size = tf.Variable(0, tf.int32)
-
+  def __init__(self, capacity):
+    s = ()
+    d = tf.int32
+    super().__init__(capacity - 1, [d], [s])
+    self._first = tf.get_variable(name="var1",
+                                  initializer=tf.ones_initializer(),
+                                  shape=s, dtype=d, use_resource=False)
+    self._size = tf.get_variable(name="size", shape=(),
+                                 initializer=tf.zeros_initializer(),
+                                 dtype=tf.int32, use_resource=False)
+ 
   def peek(self):
-    with tf.control_dependencies([tf.assert_greater(self._size, 0)]):
-      return tf.identity(self._first)
-
-  def dequeue(self):
-    super_ = super()
-    def first():
-      return tf.identity(self._first)
-    def other():
-      dequeue = super_.dequeue()
-      dequeue = dequeue if isinstance(dequeue, tuple) else (dequeue,)
-      assigns = [p.assign(s) for p, s in zip(self._first, dequeue)]
-      with tf.control_dependencies(assigns):
-        return tf.identity(self._first)
-    element = tf.cond(tf.equal(self._size, 1), first, other)
-    with tf.control_dependencies([self._size.assign_sub(1)]):
-      return tf.identity(element)
+    return self._first.read_value()
 
   def enqueue(self, element):
     super_ = super()
     def first():
-      assigns = [p.assign(e) for p, e in zip(self._first, element)]
+      assigns = [self._first.assign(element)]
       with tf.control_dependencies(assigns):
         return tf.constant(0)
+      
     def other():
       with tf.control_dependencies([super_.enqueue(element)]):
         return tf.constant(0)
-    dummy = tf.cond(tf.equal(self._size, 0), first, other)
+      
     with tf.control_dependencies([self._size.assign_add(1)]):
+      dummy = tf.cond(tf.equal(self._size, 0), first, other)
       return tf.identity(dummy)
 
 
-queue = Queue(10, [tf.int32], [()])
-queue_peek = queue.peek()[0]
-queue_init = queue.enqueue([tf.constant(1)])
+queue = Queue(10)
+queue_peek = queue.peek()
+print("Peek op is "+str(queue_peek))
 
-for i in range(10):
+queue_init = queue.enqueue(tf.constant(-2))
+
+
+print(tf.get_default_graph().as_graph_def())
+for i in range(20):
   sess = tf.Session()
   sess.run(tf.global_variables_initializer())
   sess.run(queue_init)
+  print("queue size", sess.run(queue.size()))
+  sess.run(queue.close())
+
+#  print("Printing queue")
+#  while True:
+#    print(sess.run(queue.dequeue()))
 
   run_options = tf.RunOptions(trace_level=tf.RunOptions.FULL_TRACE)
   run_options.output_partition_graphs = True
   run_metadata = tf.RunMetadata()
+  #import pdb; pdb.set_trace()
+  # queue_peek, 
   result = sess.run(queue_peek, run_metadata=run_metadata,
                     options=run_options)
 
