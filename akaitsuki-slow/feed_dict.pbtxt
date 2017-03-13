@@ -1,0 +1,188 @@
+step_stats {
+  dev_stats {
+    device: "/job:localhost/replica:0/task:0/cpu:0"
+    node_stats {
+      node_name: "_SOURCE"
+      all_start_micros: 1489437692909096
+      op_start_rel_micros: 2
+      op_end_rel_micros: 3
+      all_end_rel_micros: 7
+      memory {
+        allocator_name: "cpu"
+      }
+      timeline_label: "_SOURCE = NoOp()"
+      scheduled_micros: 1489437692909081
+    }
+    node_stats {
+      node_name: "mul/y"
+      all_start_micros: 1489437692909111
+      op_end_rel_micros: 1
+      all_end_rel_micros: 11
+      memory {
+        allocator_name: "cpu"
+      }
+      output {
+        tensor_description {
+          dtype: DT_FLOAT
+          shape {
+          }
+          allocation_description {
+            requested_bytes: 4
+            allocator_name: "cpu"
+            ptr: 4588618432
+          }
+        }
+      }
+      timeline_label: "mul/y = Const()"
+      scheduled_micros: 1489437692909103
+    }
+    node_stats {
+      node_name: "mul"
+      all_start_micros: 1489437692909144
+      op_start_rel_micros: 2
+      op_end_rel_micros: 12
+      all_end_rel_micros: 16
+      memory {
+        allocator_name: "cpu"
+        total_bytes: 4
+      }
+      output {
+        tensor_description {
+          dtype: DT_FLOAT
+          shape {
+          }
+          allocation_description {
+            requested_bytes: 4
+            allocator_name: "cpu"
+            ptr: 4937671424
+          }
+        }
+      }
+      timeline_label: "mul = Mul(_recv_Placeholder_0, mul/y)"
+      scheduled_micros: 1489437692909140
+    }
+  }
+}
+partition_graphs {
+  node {
+    name: "_recv_Placeholder_0"
+    op: "_Recv"
+    device: "/job:localhost/replica:0/task:0/cpu:0"
+    attr {
+      key: "client_terminated"
+      value {
+        b: true
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/cpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/cpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: -2824119418009608211
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "Placeholder:0"
+      }
+    }
+    attr {
+      key: "tensor_type"
+      value {
+        type: DT_FLOAT
+      }
+    }
+  }
+  node {
+    name: "mul/y"
+    op: "Const"
+    device: "/job:localhost/replica:0/task:0/cpu:0"
+    attr {
+      key: "dtype"
+      value {
+        type: DT_FLOAT
+      }
+    }
+    attr {
+      key: "value"
+      value {
+        tensor {
+          dtype: DT_FLOAT
+          tensor_shape {
+          }
+          float_val: 2.0
+        }
+      }
+    }
+  }
+  node {
+    name: "mul"
+    op: "Mul"
+    input: "_recv_Placeholder_0"
+    input: "mul/y"
+    device: "/job:localhost/replica:0/task:0/cpu:0"
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+  }
+  node {
+    name: "_send_mul_0"
+    op: "_Send"
+    input: "mul"
+    device: "/job:localhost/replica:0/task:0/cpu:0"
+    attr {
+      key: "T"
+      value {
+        type: DT_FLOAT
+      }
+    }
+    attr {
+      key: "client_terminated"
+      value {
+        b: true
+      }
+    }
+    attr {
+      key: "recv_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/cpu:0"
+      }
+    }
+    attr {
+      key: "send_device"
+      value {
+        s: "/job:localhost/replica:0/task:0/cpu:0"
+      }
+    }
+    attr {
+      key: "send_device_incarnation"
+      value {
+        i: -2824119418009608211
+      }
+    }
+    attr {
+      key: "tensor_name"
+      value {
+        s: "mul:0"
+      }
+    }
+  }
+  versions {
+    producer: 21
+  }
+}
