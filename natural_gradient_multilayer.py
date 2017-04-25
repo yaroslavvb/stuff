@@ -3,6 +3,9 @@
 # Apply natural gradient (using empirical Fisher) to a multilayer problem
 # Accompanying notebooks:
 #
+# Overview of experiments
+# https://docs.google.com/document/d/1S0q8LuwgUCWT7n3Z2-YoM7LBL1yFCQt0NEtpUDrWX3I/edit?usp=sharing
+#
 # natural_gradient_multilayer.nb
 # https://www.wolframcloud.com/objects/a273119a-6eb0-4521-b79d-30795f155dc4
 # 
