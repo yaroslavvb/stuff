@@ -33,7 +33,7 @@ for i in range(9):
   if method == 'gesdd':
     result = linalg.svd(x)
   elif method == 'gesvd':
-    result = linalg.svd(x)
+    result = linalg.svd(x, lapack_driver='gesvd')
   elif method == 'eigh':
     result = linalg.eigh(x)
   else:
