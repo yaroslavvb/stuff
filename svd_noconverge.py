@@ -1,3 +1,4 @@
+import scipy
 import scipy.linalg as linalg
 import numpy as np
 import os
@@ -18,7 +19,7 @@ def download_if_needed(fn,target_length=0,bucket="yaroslavvb_stuff"):
   url="https://storage.googleapis.com/%s/%s"%(bucket, fn)
   response = urllib.request.urlopen(url)
   body = response.read()
-  print("Read %d bytes from $url"%(len(body),))
+  print("Read %d bytes from %s"%(len(body), url))
   if target_length:
     assert len(body)==target_length
     
@@ -28,19 +29,26 @@ fn='badsvd0'
 download_if_needed(fn, 2458624)
 target0 = np.fromfile(fn, np.float32).reshape(784,784)
 
+success = True
 try:
   u0, s0, vt0 = linalg.svd(target0)
 except Exception as e:
   print("SVD failure")
-  print(e)
+  print(repr(e))
+  success = False
 else:
   print("SVD success")
 
+print("Scipy version: ", scipy.version.full_version)
+print("Numpy version: ", np.version.full_version)
+print("Python version: ", sys.version)
+print("Python binary: ", sys.executable)
+
 print("-"*80)
-print("MKL version")
+print("MKL version:")
 print(mklVersion())
 print("-"*80)
-print("Conda version")
+print("Conda version:")
 os.system("conda list --explicit")
 print("-"*80)
 print("CPU version")
@@ -49,7 +57,11 @@ for l in open("/proc/cpuinfo").read().split('\n'):
     print(l)
     break
 
-
+if success:
+  print("Success.")
+else:
+  print("Failure.")
+  
 # Upload notes:
 # export fullname=badsvd0
 # export bucket=yaroslavvb_stuff
