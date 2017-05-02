@@ -23,4 +23,4 @@ print("Success")
 # export bucket=yaroslavvb_stuff
 # gsutil cp $fullname gs://$bucket
 # gsutil acl set public-read gs://$bucket/$fullname
-# echo https://storage.googleapis.com/tensorflow-community-wheels/$fullname
+# echo https://storage.googleapis.com/$bucket/$fullname
