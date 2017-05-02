@@ -8,7 +8,6 @@
 # Xeon V4:
 # n=4096 gesdd min: 5586.02, median: 6032.16
 
-import util
 from scipy import linalg  # for svd
 import numpy as np
 import time
@@ -26,7 +25,6 @@ assert method in methods
 n=4096
 x = np.random.randn(n*n).reshape((n,n)).astype(dtype=np.float32)
 x = x @ x.T
-util.record_time()
 start_time = time.time()
 times = []
 
