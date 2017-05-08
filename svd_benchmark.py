@@ -7,6 +7,12 @@
 #
 # Xeon V4:
 # n=4096 gesdd min: 5586.02, median: 6032.16
+#
+#
+# i7-5820K CPU @ 3.30GHz
+# n=4096 gesdd 7288.02, median: 7397.23, mean: 7478.78
+# n=4096 inv 520 msec
+
 
 from scipy import linalg  # for svd
 import numpy as np
