@@ -4,6 +4,8 @@
 # n=4096 eigs  min: 27758.34, median: 28883.69
 # n=4096 gesdd min: 7241.70, median: 8477.95
 # n=4096 gesvd min=20487.48, median: 22057.64,
+# n=4096 inv min: 556.67, median: 579.25,
+# n=4096 linsolve: min: 534.40, median: 558.06, mean: 579.19
 #
 # Xeon V4:
 # n=4096 gesdd min: 5586.02, median: 6032.16
@@ -19,7 +21,7 @@ import numpy as np
 import time
 import sys
 
-methods = ['gesdd', 'gesvd', 'eigh']
+methods = ['gesdd', 'gesvd', 'eigh', 'inv', 'linsolve']
 
 if len(sys.argv)<2:
   method = methods[0]
@@ -31,6 +33,7 @@ assert method in methods
 n=4096
 x = np.random.randn(n*n).reshape((n,n)).astype(dtype=np.float32)
 x = x @ x.T
+x0 = np.random.randn(n).reshape((n,1)).astype(dtype=np.float32)
 start_time = time.time()
 times = []
 
@@ -42,6 +45,10 @@ for i in range(9):
     result = linalg.svd(x, lapack_driver='gesvd')
   elif method == 'eigh':
     result = linalg.eigh(x)
+  elif method == 'inv':
+    result = linalg.inv(x)
+  elif method == 'linsolve':
+    result = linalg.solve(x, x0)
   else:
     assert False
   new_time = time.time()
