@@ -1,0 +1,17 @@
+#!/usr/bin/env python
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
+import tensorflow as tf
+version=tf.__version__
+print("version: %s"%(version,))
+commit = tf.__git_version__
+print("__git_version__: %s"%(commit,))
+# commit looks like this
+# 'v1.0.0-65-g4763edf-dirty'
+commit = commit.replace("'","")
+if commit.endswith('-dirty'):
+  dirty = True
+  commit = commit[:-len('-dirty')]
+commit=commit.rsplit('-g', 1)[1]
+url = 'https://github.com/tensorflow/tensorflow/commit/'+commit
+print("Commit %s" %(url,))
