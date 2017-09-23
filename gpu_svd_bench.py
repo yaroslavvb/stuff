@@ -10,16 +10,44 @@ numpy gesvd  ---: 1.2659776210784912 s
 
 '''
 import numpy as np
+import os
+os.environ["TF_CPP_MIN_LOG_LEVEL"]="2"
 import tensorflow as tf
 import time;
 import numpy.linalg as NLA;
 from scipy import linalg  # for svd
 
-# initializing variables: 1.79107093811 s
-# Tensorflow SVD ---: 7.43185997009 s
-# numpy default  ---: 2.80239009857 s
-# numpy gesvd  ---: 117.758116961 s
+def get_tensorflow_version_url():
+    import tensorflow as tf
+    version=tf.__version__
+    commit = tf.__git_version__
+    # commit looks like this
+    # 'v1.0.0-65-g4763edf-dirty'
+    commit = commit.replace("'","")
+    if commit.endswith('-dirty'):
+        dirty = True
+        commit = commit[:-len('-dirty')]
+    commit=commit.rsplit('-g', 1)[1]
+    url = 'https://github.com/tensorflow/tensorflow/commit/'+commit
+    return url
 
+def get_mkl_version():
+    import ctypes
+    import numpy as np
+    ver = np.zeros(199, dtype=np.uint8)
+    mkl = ctypes.cdll.LoadLibrary("libmkl_rt.so")
+    mkl.MKL_Get_Version_String(ver.ctypes.data_as(ctypes.c_char_p), 198)
+    return ver[ver != 0].tostring()
+
+
+if np.__config__.get_info("lapack_mkl_info"):
+    print("MKL detected")
+    print("MKL version", get_mkl_version())
+else:
+    print("no MKL")
+
+print("TF version: ", tf.__git_version__)
+print("TF url: ", get_tensorflow_version_url())
 
 N=1534;
 
@@ -36,28 +64,38 @@ with tf.device("/cpu:0"):
     [D2_cpu, E1_cpu,  E2_cpu] = tf.svd(specVarCPU);
 
 
-sess = tf.Session(config=tf.ConfigProto(log_device_placement=True))
+sess = tf.Session(config=tf.ConfigProto(log_device_placement=False))
 
 # Initialize all tensorflow variables
 start = time.time();
 sess.run(specVarGPU.initializer, feed_dict={init_holder_gpu: svd_array});
 sess.run(specVarCPU.initializer, feed_dict={init_holder_cpu: svd_array});
-print('initializing variables: {} s'.format(time.time()-start))
     
+[d, e1, e2]  = sess.run([D2_gpu.op, E1_gpu.op,  E2_gpu.op]);
+[d, e1, e2]  = sess.run([D2_cpu.op, E1_cpu.op,  E2_cpu.op]);
+u, s, v = linalg.svd(svd_array);
+u, s, v = linalg.svd(svd_array, lapack_driver='gesdd');
+u, s, v = linalg.svd(svd_array, lapack_driver='gesvd');
+print('pre-warming: %.3f'%(time.time()-start))
+
 start_time = time.time();
 [d, e1, e2]  = sess.run([D2_gpu.op, E1_gpu.op,  E2_gpu.op]);
-print("Tensorflow GPU SVD ---: {} s" . format(time.time() - start_time));
+print("TF GPU %.6f"%(time.time() - start_time))
 
 [d, e1, e2]  = sess.run([D2_cpu.op, E1_cpu.op,  E2_cpu.op]);
-print("Tensorflow CPU SVD ---: {} s" . format(time.time() - start_time));
+print("TF CPU %.6f" %(time.time() - start_time))
 
 # Defaut numpy (gesdd)
 start = time.time();
 u, s, v = linalg.svd(svd_array);
-print('numpy default  ---: {} s'.format(time.time() - start));
+print('numpy default: %.6f'%(time.time() - start))
+
+start = time.time();
+u, s, v = linalg.svd(svd_array);
+print('numpy gesdd: %.6f'%(time.time() - start))
 
 # Numpy gesvd
 start = time.time();
 u, s, v = linalg.svd(svd_array, lapack_driver='gesvd');
-print('numpy gesvd  ---: {} s'.format(time.time() - start));
+print('numpy gesvd %.6f'%(time.time() - start))
 
