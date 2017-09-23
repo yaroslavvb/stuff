@@ -3,10 +3,18 @@ Created on Sep 21, 2017
 
 modified from voldemaro
 
-Tensorflow GPU SVD ---: 5.9389612674713135 s
-Tensorflow CPU SVD ---: 6.898533821105957 s
-numpy default  ---: 0.42925524711608887 s
-numpy gesvd  ---: 1.2659776210784912 s
+On I7/GTX 1080
+
+MKL detected
+MKL version b'Intel(R) Math Kernel Library Version 2017.0.3 Product Build 20170413 for Intel(R) 64 architecture applications'
+TF version:  b'v1.3.0-rc1-2487-g088cdea'
+TF url:  https://github.com/tensorflow/tensorflow/commit/088cdea
+pre-warming: 9.510
+TF GPU 5.553296
+TF CPU 6.508888
+numpy default: 0.302414
+numpy gesdd: 0.251199
+numpy gesvd 1.485335
 
 '''
 import numpy as np
