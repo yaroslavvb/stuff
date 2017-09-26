@@ -18,8 +18,7 @@ if __name__=='__main__':
                                   rewrite_options=rewrite_options)
     config = tf.ConfigProto(graph_options=graph_options)
     sess = tf.Session(config=config)
-
-    sess = tf.Session()
+    
     size = 12000
     num_runs = 10
 
