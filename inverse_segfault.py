@@ -178,6 +178,7 @@ def pseudo_inverse_stable(svd, eps=1e-7):
 # todo: rename l to L
 def regularized_inverse(mat, l=0.1):
   return tf.matrix_inverse(mat + l*Identity(int(mat.shape[0])))
+  #    return tf.matrix_inverse(mat)
 
 # TODO: this gives biased result when I use identity
 def regularized_inverse2(svd, L=1e-3):
@@ -232,17 +233,24 @@ def pseudo_inverse_scipy(tensor):
     result.set_shape(tensor.shape)
     return result
   
-  
 
-def Identity(n, dtype=None, name=None):
+identity_cache = {}
+def Identity(n, dtype=np.float32, name='dummy'):
   """Identity matrix of size n."""
+  global identity_cache
   if hasattr(n, "shape"):  # got a Tensor
     nn = fix_shape(n.shape)
     assert nn[0] == nn[1]
     n = nn[0]
-  if not dtype:
-    dtype = default_dtype
-  return tf.diag(tf.ones((n,), dtype=dtype), name=name)
+  n = int(n)  # convert from dimension
+  if n in identity_cache:
+    return identity_cache[n]
+  else:
+    with tf.device('/gpu:0'):
+      val = tf.constant(np.diag(np.ones((n,), dtype=dtype)))
+    identity_cache[n] = val
+  return identity_cache[n]
+
 
 def ones(n, dtype=None, name=None):
   if not dtype:
