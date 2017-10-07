@@ -1324,13 +1324,6 @@ def W_uniform(s1, s2): # uniform weight init from Ng UFLDL
   return np.random.random(2*s2*s1)*2*r-r
 
 
-def check_mkl():
-  assert np.__config__.get_info("lapack_mkl_info"), "No MKL detected :("
-  print("Using MKL")
-
-
-#from util import t  # transpose
-u.check_mkl()
 
 import numpy as np
 import scipy
