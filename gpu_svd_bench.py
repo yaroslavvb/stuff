@@ -2,14 +2,17 @@
 Running on I7/GTX 1080
 
 MKL version b'Intel(R) Math Kernel Library Version 2017.0.3 Product Build 20170413 for Intel(R) 64 architecture applications'
-TF version:  b'v1.3.0-rc1-2487-g088cdea'
-TF url:  https://github.com/tensorflow/tensorflow/commit/088cdea
+TF version:  b'v1.3.0-rc1-3233-g07bf1d3'
+TF url:  https://github.com/tensorflow/tensorflow/commit/07bf1d3
+PyTorch version 0.2.0_4
 Timing in ms for 1534 x 1534 SVD of type <class 'numpy.float32'>
-numpy default        min:   243.52, median:   246.42, mean:   259.49
-numpy gesvd          min:  1294.13, median:  1296.60, mean:  1298.93
-numpy gesdd          min:   242.36, median:   242.80, mean:   245.32
-TF CPU               min:   950.77, median:  1080.64, mean:  1050.79
-TF GPU               min:  5483.26, median:  5520.19, mean:  5571.15
+numpy default        min:   328.32, median:   328.76, mean:   343.25
+numpy gesvd          min:  1424.12, median:  1425.25, mean:  1447.09
+numpy gesdd          min:   243.74, median:   243.98, mean:   244.40
+TF CPU               min:   965.73, median:  1118.91, mean:  1089.15
+TF GPU               min:  5525.59, median:  5726.54, mean:  5987.72
+PyTorch CPU          min:  1241.66, median:  1372.49, mean:  1389.59
+PyTorch GPU          min:   450.84, median:   455.17, mean:   471.32
 '''
 
 from scipy import linalg  # for svd
@@ -22,10 +25,11 @@ os.environ["TF_CPP_MIN_LOG_LEVEL"]="2"  # nospam
 
 import tensorflow as tf
 import gc; gc.disable()
+import torch
 
 NUM_RUNS = 11
 dtype = np.float32
-N=1534;
+N=1534
 
 
 def get_tensorflow_version_url():
@@ -54,6 +58,7 @@ timeline_counter = 0
 run_options = tf.RunOptions(trace_level=tf.RunOptions.FULL_TRACE)
 def traced_run(fetches):
     """Runs fetches, dumps timeline files in current directory."""
+    
     from tensorflow.python.client import timeline
 
     global timeline_counter
@@ -96,33 +101,38 @@ else:
 
 print("TF version: ", tf.__git_version__)
 print("TF url: ", get_tensorflow_version_url())
+print("PyTorch version", torch.version.__version__)
 
 
-svd_array = np.random.random_sample((N,N)).astype(dtype);
+with tf.device("/cpu:0"):
+    data = tf.random_uniform((N, N), dtype=dtype)
+    tf_svd_cpu = tf.group(*tf.svd(data))
 
 with tf.device("/gpu:0"):
-    init_holder_gpu = tf.placeholder(dtype, shape=(N,N))
-    specVarGPU = tf.random_uniform((N,N), dtype=dtype)
-    [D2_gpu, E1_gpu,  E2_gpu] = tf.svd(specVarGPU);
-with tf.device("/cpu:0"):
-    init_holder_cpu = tf.placeholder(dtype, shape=(N,N))
-    specVarCPU = tf.random_uniform((N,N), dtype=dtype)
-    [D2_cpu, E1_cpu,  E2_cpu] = tf.svd(specVarCPU);
+    data = tf.random_uniform((N, N), dtype=dtype)
+    tf_svd_gpu = tf.group(*tf.svd(data))
 
+np_data = np.random.random((N, N)).astype(dtype)
 print("Timing in ms for %d x %d SVD of type %s"%(N, N, dtype))
-def func(): linalg.svd(svd_array)
+def func(): linalg.svd(np_data)
 benchmark("numpy default", func)
 
-def func(): linalg.svd(svd_array, lapack_driver='gesvd');
+def func(): linalg.svd(np_data, lapack_driver='gesvd');
 benchmark("numpy gesvd", func)
 
-def func(): linalg.svd(svd_array, lapack_driver='gesdd');
+def func(): linalg.svd(np_data, lapack_driver='gesdd');
 benchmark("numpy gesdd", func)
 
 sess = tf.Session()
 
-def func(): sess.run([D2_cpu.op, E1_cpu.op,  E2_cpu.op])
+def func(): sess.run(tf_svd_cpu)
 benchmark("TF CPU", func)
 
-def func(): sess.run([D2_gpu.op, E1_gpu.op,  E2_gpu.op])
+def func(): sess.run(tf_svd_gpu)
 benchmark("TF GPU", func)
+
+import torch
+def func(): torch.svd(torch.rand((N,N)))
+benchmark("PyTorch CPU", func)
+def func(): torch.svd(torch.rand((N,N)).cuda())
+benchmark("PyTorch GPU", func)
