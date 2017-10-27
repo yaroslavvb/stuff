@@ -33,6 +33,12 @@
 # 1577.86 MB per second
 #  143.93 MB per second
 
+# Profiling on c4 instance with tf1.4rc1
+# python3 client_transfer_benchmark.py
+# 2692.30 MB per second
+# python3 client_transfer_benchmark.py --direction=p2t
+# 7012.22 MB per second
+
 
 import gc
 import os
