@@ -2,11 +2,10 @@
 # 8192 x 8192 matmul took: 0.10 sec, 11304.59 G ops/sec
 # http://stackoverflow.com/questions/41804380/testing-gpu-with-tensorflow-matrix-multiplication
 #
-# On V100/fp16
-# 4096 x 4096 matmul took: 0.00191 sec, 72111.44 G ops/sec
-# 8192 x 8192 matmul took: 0.01 sec, 76310.61 G ops/sec
-# 8192 x 8192 matmul took: 0.16 sec  54970.06 G ops/sec
-# 10000 x 10000 matmul took: 0.03 sec, 65290.49 G ops/sec
+# On V100/fp16 peak 85k for 8192x8192
+# timing under matmul_times subdirectory
+#
+# TODO: figure out the deal with spikes, is it CUDA autotune?
 
 from __future__ import print_function
 
