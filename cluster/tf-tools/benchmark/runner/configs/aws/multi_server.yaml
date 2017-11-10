@@ -1,0 +1,53 @@
+# Run config
+cloud_type: aws
+
+tf_url: tensorflow-gpu
+
+# Shared with AWS and GCE
+instance_tag: tf-monster
+instance_type: p2.8xlarge
+instance_force_reuse: False
+instance_ami: ami-xxxxxxx
+instance_count: 8
+#instance_on_finish: stop
+
+# As of May 2017 this config matches what was published on tf.org.
+# For batch-size 32, 4 ps_servers is the right setting for 8 workers
+run_configs:
+  - name: distributed
+    workers: 8
+    ps_servers: 8
+    gpus: 8
+    models: ['resnet50']
+    ps_server: gpu
+    data_format: NCHW
+    variable_update: distributed_replicated
+    log_folder: results
+    framework: tensorflow
+    num_batches: 100
+    batch_size: 64
+    repeat: 5
+    cross_replica_sync: True
+    optimizer: sgd
+
+
+####
+# Full run 32 GPUs down to 1 GPU with ps_servers tuned for resnet50
+#######
+
+  - name: distributed
+    workers: 4
+    ps_servers: 4
+
+  - name: distributed
+    workers: 2
+    ps_servers: 2
+
+  - name: distributed
+    workers: 1
+    ps_servers: 1
+
+  - name: distributed
+    workers: '0'
+    ps_servers: '0'
+    gpus: 1

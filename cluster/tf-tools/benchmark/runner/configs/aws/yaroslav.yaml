@@ -1,0 +1,29 @@
+# Run config
+cloud_type: aws
+
+tf_url: tensorflow-gpu
+
+instance_tag: yaroslav
+instance_type: p2.xlarge
+instance_force_reuse: False
+instance_ami: ami-60df1418
+instance_count: 8
+#instance_on_finish: stop
+
+run_configs:
+  - name: distributed
+    workers: 1
+    ps_servers: 1
+    gpus: 1
+    models: ['resnet50']
+    ps_server: gpu
+    data_format: NCHW
+    variable_update: distributed_replicated
+    log_folder: results
+    framework: tensorflow
+    num_batches: 100
+    batch_size: 64
+    repeat: 1
+    cross_replica_sync: True
+    optimizer: sgd
+
