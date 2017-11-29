@@ -1,0 +1,4 @@
+boto3
+paramiko
+pyyaml
+tensorflow-gpu==1.4

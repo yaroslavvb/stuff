@@ -1,0 +1,132 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Distributed TensorFlow CloudFormation
+Mappings: 
+  AMI:
+    ap-southeast-2:
+      AMI: ami-1a668878
+  Init:
+    tensorflow-cfn:
+      Content: |
+        #!/bin/bash
+        #
+        echo Region:$Region
+        echo InstanceId:$InstanceId
+        echo NetworkInterfaceId:$NetworkInterfaceId
+        echo DesiredCapacity:$DesiredCapacity
+        HostedZoneId=$(aws --region $Region route53 list-hosted-zones --query "HostedZones[?Name == 'distributed.tensorflow.'].Id" --output text | sed 's/\/hostedzone\///g')
+        AutoScalingGroupName=$(aws --region $Region autoscaling describe-auto-scaling-instances --instance-ids $InstanceId --output text --query AutoScalingInstances[0].AutoScalingGroupName)
+        Address=$(aws --region $Region ec2 describe-instances --instance-id $InstanceId --query "Reservations[0].Instances[0].PrivateIpAddress" --output text)
+        for cycle in {1..60} ; do
+            attach=$(aws --region $Region ec2 attach-network-interface --network-interface-id $NetworkInterfaceId --instance-id $InstanceId --device-index 1 --output text --query AttachmentId)
+            if [[ $attach = eni-attach-* ]]; then
+                for (( entry=0; entry<${DesiredCapacity}; entry++ )) ; do
+                    index=$(( entry ))
+                    name=$index.distributed.tensorflow.
+                    record=$(aws --region $Region route53 list-resource-record-sets --hosted-zone-id $HostedZoneId --query "ResourceRecordSets[?Name == '$name'].ResourceRecords" --output text)
+                    if [[ ! -z $record ]]; then
+                        value=$(aws --region $Region ec2 describe-instances --instance-id $(aws --region $Region autoscaling describe-auto-scaling-groups --auto-scaling-group-names $AutoScalingGroupName --query "AutoScalingGroups[0].Instances[*].InstanceId" --output text) --filters "Name=private-ip-address,Values=$record" "Name=instance-state-name,Values=pending,running,stopping,stopped" --query "Reservations[0].Instances[0].PrivateIpAddress" --output text)
+                        if [[ $record != $value ]]; then
+                            record=
+                        fi
+                    fi
+                    if [[ -z $record ]]; then
+                        # Found an open spot
+                        aws --region $Region route53 change-resource-record-sets --hosted-zone-id $HostedZoneId --change-batch "{\"Changes\":[{\"Action\":\"UPSERT\",\"ResourceRecordSet\":{\"Name\":\"$name\",\"Type\":\"A\",\"TTL\":5,\"ResourceRecords\":[{\"Value\":\"$Address\"}]}}]}"
+                        echo $index > /etc/tensorflow_index
+                        break
+                    fi
+                    echo record:$record
+                done
+                echo SUCCESS
+                aws --region $Region ec2 detach-network-interface --attachment-id $attach
+                exit 0
+            fi
+            sleep 10
+        done
+        echo FAILURE
+        exit 1
+
+Parameters: 
+  VPC:
+    Type: String
+    Default: ""
+  SubnetId:
+    Type: String
+  InstanceType:
+    Type: String
+    Default: t2.micro
+  VolumeSize:
+    Type: String
+    Default: 20
+  DesiredCapacity:
+    Type: String
+    Default: 3
+  IamInstanceProfile:
+    Type: String
+    Default: Kubernetes
+  KeyName:
+    Type: String
+    Default: ""
+Conditions:
+  KeyName: !Equals [ !Ref KeyName, "" ]
+Resources:
+  NetworkInterface:
+    Type: AWS::EC2::NetworkInterface
+    Properties:
+      SubnetId: !Ref SubnetId
+
+  LaunchConfiguration:
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Properties: 
+      KeyName: !If [ KeyName, !Ref "AWS::NoValue", !Ref KeyName ]
+      IamInstanceProfile: !Ref IamInstanceProfile
+      ImageId: !FindInMap [ AMI, !Ref "AWS::Region", AMI ]
+      InstanceType: !Ref InstanceType
+      BlockDeviceMappings:
+      - DeviceName: /dev/xvda
+        Ebs:
+          VolumeSize: !Ref VolumeSize
+          VolumeType: gp2
+      UserData:
+        Fn::Base64: !Sub
+          - |+
+            #cloud-config
+
+            write_files:
+              - path: /etc/tensorflow-cfn
+                owner: root
+                encoding: base64
+                content: ${Init}
+
+            runcmd:
+              - set -x
+              - yum install -y docker
+              - sed -i "s/^\s*OPTIONS=\"/OPTIONS=\"--storage-driver overlay2 /" /etc/sysconfig/docker
+              - chkconfig docker on
+              - service docker start
+              - echo
+              - docker pull tensorflow/tensorflow:1.4.0
+              - echo
+              - Region=$(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone | sed 's/.$//')
+              - InstanceId=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
+              - AmiLaunchIndex=$(curl -s http://169.254.169.254/latest/meta-data/ami-launch-index)
+              - export Region=$Region && export InstanceId=$InstanceId && export NetworkInterfaceId=${NetworkInterfaceId} && export DesiredCapacity=${DesiredCapacity}
+              - bash -x /etc/tensorflow-cfn
+
+            output: {all: '| tee -a /var/log/cloud-config.log'}
+          - { Init: { "Fn::Base64": !FindInMap [ Init, tensorflow-cfn, Content ] }, NetworkInterfaceId: !Ref NetworkInterface, DesiredCapacity: !Ref DesiredCapacity }
+
+  AutoScalingGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      LaunchConfigurationName: !Ref LaunchConfiguration
+      MinSize: 1
+      MaxSize: !Ref DesiredCapacity
+      DesiredCapacity: !Ref DesiredCapacity
+      VPCZoneIdentifier:
+      - !Ref SubnetId
+      Tags:
+      -
+        Key: Name
+        Value: !Ref AWS::StackName
+        PropagateAtLaunch: true
