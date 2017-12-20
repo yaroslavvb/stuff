@@ -48,11 +48,10 @@ u = util
 
 
 default_dtype = tf.float32
-USE_MKL_SVD=True                   # Tensorflow vs MKL SVD
-DUMP_BAD_SVD=False                 # when SVD fails, dump matrix to temp
+USE_MKL_SVD=True                   # Tensorflow vs 
 
-if USE_MKL_SVD:
-  assert np.__config__.get_info("lapack_mkl_info"), "No MKL detected :("
+SVD
+DUMP_BAD_SVD=False                 # when SVD fails, dump matrix to temp
 
 
 
