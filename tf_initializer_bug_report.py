@@ -48,7 +48,7 @@ u = util
 
 
 default_dtype = tf.float32
-USE_MKL_SVD=True                   # Tensorflow vs 
+USE_MKL_SVD=False                   # Tensorflow vs 
 
 SVD
 DUMP_BAD_SVD=False                 # when SVD fails, dump matrix to temp
