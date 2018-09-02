@@ -1,10 +1,12 @@
 name: benchmark
 channels:
 - anaconda
+- pytorch
 dependencies:
 - python=3.6
 - mkl
-- tensorflow-gpu
 - pytorch
 - scipy
 - numpy
+- pip:
+  - tensorflow-gpu

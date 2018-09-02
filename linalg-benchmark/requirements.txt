@@ -1,4 +1,5 @@
+# mkl is conda only
 numpy
 scipy
 tensorflow-gpu
-pytorch
+torch
