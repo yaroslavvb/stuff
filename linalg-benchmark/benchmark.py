@@ -1,4 +1,4 @@
-'''
+"""
 Running on I7/GTX 1080
 
 MKL version b'Intel(R) Math Kernel Library Version 2017.0.3 Product Build 20170413 for Intel(R) 64 architecture applications'
@@ -13,7 +13,7 @@ TF CPU               min:   965.73, median:  1118.91, mean:  1089.15
 TF GPU               min:  5525.59, median:  5726.54, mean:  5987.72
 PyTorch CPU          min:  1241.66, median:  1372.49, mean:  1389.59
 PyTorch GPU          min:   450.84, median:   455.17, mean:   471.32
-'''
+"""
 
 import scipy
 from scipy import linalg  # for svd
@@ -21,15 +21,13 @@ import numpy as np
 import os
 import sys
 import time
+import gc; gc.disable()
+import torch
+import tensorflow as tf
 
 os.environ["TF_CPP_MIN_LOG_LEVEL"]="2"  # nospam
 
-import tensorflow as tf
 HAVE_GPU = tf.test.is_gpu_available()
-
-import gc; gc.disable()
-import torch
-
 NUM_RUNS = 11
 dtype = np.float32
 N=1534
@@ -49,6 +47,7 @@ def get_tensorflow_version_url():
     url = 'https://github.com/tensorflow/tensorflow/commit/'+commit
     return url
 
+
 def get_mkl_version():
     import ctypes
     import numpy as np
@@ -61,6 +60,7 @@ def get_mkl_version():
       return ver[ver != 0].tostring()
     except:
       return 'unknown'
+
 
 timeline_counter = 0
 run_options = tf.RunOptions(trace_level=tf.RunOptions.FULL_TRACE)
@@ -84,9 +84,10 @@ def traced_run(fetches):
     timeline_counter+=1
     return results
 
+
 def benchmark(message, func):
     if 'gpu' in message.lower() and not HAVE_GPU:
-        print("%-20s no GPU detected"%(message))
+        print(f"{message:<20} no GPU detected")
         return
     time_list = []
     for i in range(NUM_RUNS):
@@ -99,16 +100,16 @@ def benchmark(message, func):
         min = np.min(time_list)
         median = np.median(time_list)
         formatted = ["%.2f"%(d,) for d in time_list[:10]]
-        result = "min: %8.2f, median: %8.2f, mean: %8.2f"%(min, median, np.mean(time_list))
+        result = f"min: {min:8.2f}, median: {median:8.2f}, mean: {np.mean(time_list):8.2f}"
     else:
         result = "empty"
-    print("%-20s %s"%(message, result))
+    print(f"{message:<20} {result}")
     
 
 if np.__config__.get_info("lapack_mkl_info"):
     print("MKL version", get_mkl_version())
 else:
-    print("no MKL")
+    print("not using MKL")
 
 print("TF version: ", tf.__git_version__, get_tensorflow_version_url())
 print("PyTorch version", torch.version.__version__)
