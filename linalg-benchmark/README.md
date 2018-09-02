@@ -31,7 +31,7 @@ r5.large
 numpy default        min:  1538.54, median:  1546.51, mean:  1573.60
 numpy gesvd          min: 33868.77, median: 33902.69, mean: 33965.48
 numpy gesdd          min:  1521.05, median:  1550.09, mean:  1549.20
-TF CPU               min:    12.92, median:    13.53, mean:    16.19
+TF CPU               ...
 TF GPU               no GPU detected
 PyTorch CPU          min:  3995.89, median:  4348.14, mean:  4364.10
 PyTorch GPU          no GPU detected
