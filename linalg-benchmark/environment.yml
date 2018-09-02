@@ -1,0 +1,10 @@
+name: benchmark
+channels:
+- anaconda
+dependencies:
+- python=3.6
+- mkl
+- tensorflow-gpu
+- pytorch
+- scipy
+- numpy
