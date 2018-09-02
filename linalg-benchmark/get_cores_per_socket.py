@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+"""Simple script to parse cpuinfo and generate command to limit to a single physical socket"""
+
 import re
 socket_re = re.compile(".*?processor.*?(?P<cpu>\d+).*?physical id.*?(?P<socket>\d+).*?power", flags=re.S)
 from collections import defaultdict
