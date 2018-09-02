@@ -15,6 +15,7 @@ PyTorch CPU          min:  1241.66, median:  1372.49, mean:  1389.59
 PyTorch GPU          min:   450.84, median:   455.17, mean:   471.32
 '''
 
+import scipy
 from scipy import linalg  # for svd
 import numpy as np
 import os
@@ -24,6 +25,8 @@ import time
 os.environ["TF_CPP_MIN_LOG_LEVEL"]="2"  # nospam
 
 import tensorflow as tf
+HAVE_GPU = tf.test.is_gpu_available()
+
 import gc; gc.disable()
 import torch
 
@@ -49,10 +52,15 @@ def get_tensorflow_version_url():
 def get_mkl_version():
     import ctypes
     import numpy as np
-    ver = np.zeros(199, dtype=np.uint8)
-    mkl = ctypes.cdll.LoadLibrary("libmkl_rt.so")
-    mkl.MKL_Get_Version_String(ver.ctypes.data_as(ctypes.c_char_p), 198)
-    return ver[ver != 0].tostring()
+
+    # this recipe only works on Linux
+    try:
+      ver = np.zeros(199, dtype=np.uint8)
+      mkl = ctypes.cdll.LoadLibrary("libmkl_rt.so")
+      mkl.MKL_Get_Version_String(ver.ctypes.data_as(ctypes.c_char_p), 198)
+      return ver[ver != 0].tostring()
+    except:
+      return 'unknown'
 
 timeline_counter = 0
 run_options = tf.RunOptions(trace_level=tf.RunOptions.FULL_TRACE)
@@ -77,6 +85,9 @@ def traced_run(fetches):
     return results
 
 def benchmark(message, func):
+    if 'gpu' in message.lower() and not HAVE_GPU:
+        print("%-20s no GPU detected"%(message))
+        return
     time_list = []
     for i in range(NUM_RUNS):
         start_time = time.perf_counter()
@@ -99,21 +110,25 @@ if np.__config__.get_info("lapack_mkl_info"):
 else:
     print("no MKL")
 
-print("TF version: ", tf.__git_version__)
-print("TF url: ", get_tensorflow_version_url())
+print("TF version: ", tf.__git_version__, get_tensorflow_version_url())
 print("PyTorch version", torch.version.__version__)
 
+print("Scipy version: ", scipy.version.full_version)
+print("Numpy version: ", np.version.full_version)
+print("Python version: ", sys.version)
+try:
+  for l in open("/proc/cpuinfo").read().split('\n'):
+    if 'model name' in l:
+      ver = l
+      break
+except:
+  ver = 'unknown'
+print("CPU version: ", ver)
 
-with tf.device("/cpu:0"):
-    data = tf.random_uniform((N, N), dtype=dtype)
-    tf_svd_cpu = tf.group(*tf.svd(data))
-
-with tf.device("/gpu:0"):
-    data = tf.random_uniform((N, N), dtype=dtype)
-    tf_svd_gpu = tf.group(*tf.svd(data))
 
 np_data = np.random.random((N, N)).astype(dtype)
-print("Timing in ms for %d x %d SVD of type %s"%(N, N, dtype))
+print("Timing in ms for %d x %d SVD"%(N, N))
+
 def func(): linalg.svd(np_data)
 benchmark("numpy default", func)
 
@@ -124,10 +139,15 @@ def func(): linalg.svd(np_data, lapack_driver='gesdd');
 benchmark("numpy gesdd", func)
 
 sess = tf.Session()
-
+with tf.device("/cpu:0"):
+    data = tf.random_uniform((N, N), dtype=dtype)
+    tf_svd_cpu = tf.group(*tf.svd(data))
 def func(): sess.run(tf_svd_cpu)
 benchmark("TF CPU", func)
 
+with tf.device("/gpu:0"):
+    data = tf.random_uniform((N, N), dtype=dtype)
+    tf_svd_gpu = tf.group(*tf.svd(data))
 def func(): sess.run(tf_svd_gpu)
 benchmark("TF GPU", func)
 
