@@ -32,34 +32,85 @@ NUM_RUNS = 11
 dtype = np.float32
 N=1534
 
+def main():
+  if np.__config__.get_info("lapack_mkl_info"):
+    print("MKL version", get_mkl_version())
+  else:
+    print("not using MKL")
+
+  print("TF version: ", tf.__git_version__, get_tensorflow_version_url())
+  print("PyTorch version", torch.version.__version__)
+
+  print("Scipy version: ", scipy.version.full_version)
+  print("Numpy version: ", np.version.full_version)
+  #  print("Python version: ", sys.version)
+  print_cpu_info()
+
+  np_data = np.random.random((N, N)).astype(dtype)
+  print("Timing in ms for %d x %d SVD"%(N, N))
+
+  def func(): linalg.svd(np_data)
+  benchmark("numpy default", func)
+
+  def func(): linalg.svd(np_data, lapack_driver='gesvd');
+  benchmark("numpy gesvd", func)
+
+  def func(): linalg.svd(np_data, lapack_driver='gesdd');
+  benchmark("numpy gesdd", func)
+
+  sess = tf.Session()
+  # have to assign to variable, otherwise TF optimizes it out
+  with tf.device("/cpu:0"):
+    variable = tf.Variable(tf.zeros((N, N)), dtype=dtype)
+    data = tf.random_uniform((N, N), dtype=dtype)
+    # s/u/v convention https://github.com/tensorflow/tensorflow/pull/13850
+    s, u, v = tf.svd(data)
+    svd_assign = variable.assign(u)
+  def func(): sess.run(svd_assign)
+  benchmark("TF CPU", func)
+
+  with tf.device("/gpu:0"):
+    variable = tf.Variable(tf.zeros((N, N)), dtype=dtype)
+    data = tf.random_uniform((N, N), dtype=dtype)
+    # s/u/v convention https://github.com/tensorflow/tensorflow/pull/13850
+    s, u, v = tf.svd(data)
+    svd_assign = variable.assign(u)
+  def func(): sess.run(svd_assign)
+  benchmark("TF GPU", func)
+
+  def func(): torch.svd(torch.rand((N,N)))
+  benchmark("PyTorch CPU", func)
+  def func(): torch.svd(torch.rand((N,N)).cuda())
+  benchmark("PyTorch GPU", func)
+
+
 
 def get_tensorflow_version_url():
-    import tensorflow as tf
-    version=tf.__version__
-    commit = tf.__git_version__
-    # commit looks like this
-    # 'v1.0.0-65-g4763edf-dirty'
-    commit = commit.replace("'","")
-    if commit.endswith('-dirty'):
-        dirty = True
-        commit = commit[:-len('-dirty')]
-    commit=commit.rsplit('-g', 1)[1]
-    url = 'https://github.com/tensorflow/tensorflow/commit/'+commit
-    return url
+  version=tf.__version__
+  commit = tf.__git_version__
+  # commit looks like this
+  # 'v1.0.0-65-g4763edf-dirty'
+  commit = commit.replace("'","")
+  if commit.endswith('-dirty'):
+      dirty = True
+      commit = commit[:-len('-dirty')]
+  commit=commit.rsplit('-g', 1)[1]
+  url = 'https://github.com/tensorflow/tensorflow/commit/'+commit
+  return url
 
 
 def get_mkl_version():
-    import ctypes
-    import numpy as np
+  import ctypes
+  import numpy as np
 
-    # this recipe only works on Linux
-    try:
-      ver = np.zeros(199, dtype=np.uint8)
-      mkl = ctypes.cdll.LoadLibrary("libmkl_rt.so")
-      mkl.MKL_Get_Version_String(ver.ctypes.data_as(ctypes.c_char_p), 198)
-      return ver[ver != 0].tostring()
-    except:
-      return 'unknown'
+  # this recipe only works on Linux
+  try:
+    ver = np.zeros(199, dtype=np.uint8)
+    mkl = ctypes.cdll.LoadLibrary("libmkl_rt.so")
+    mkl.MKL_Get_Version_String(ver.ctypes.data_as(ctypes.c_char_p), 198)
+    return ver[ver != 0].tostring()
+  except:
+    return 'unknown'
 
 
 timeline_counter = 0
@@ -68,13 +119,14 @@ def traced_run(fetches):
     """Runs fetches, dumps timeline files in current directory."""
     
     from tensorflow.python.client import timeline
+    global sess
 
     global timeline_counter
     run_metadata = tf.RunMetadata()
 
     results = sess.run(fetches,
                        options=run_options,
-                       run_metadata=run_metadata);
+                       run_metadata=run_metadata)
     tl = timeline.Timeline(step_stats=run_metadata.step_stats)
     ctf = tl.generate_chrome_trace_format(show_memory=True,
                                           show_dataflow=False)
@@ -104,56 +156,37 @@ def benchmark(message, func):
     else:
         result = "empty"
     print(f"{message:<20} {result}")
+
+def print_cpu_info():
+  try:
+    for l in open("/proc/cpuinfo").read().split('\n'):
+      if 'model name' in l:
+        ver = l
+        break
+  except:
+    ver = 'unknown'
     
+  # core counts from https://stackoverflow.com/a/23378780/419116
+  print("CPU version: ", ver)
+  sys.stdout.write("CPU logical cores: ")
+  sys.stdout.flush()
+  os.system("echo $([ $(uname) = 'Darwin' ] && sysctl -n hw.logicalcpu_max || lscpu -p | egrep -v '^#' | wc -l)")
+  sys.stdout.write("CPU physical cores: ")
+  sys.stdout.flush()
+  os.system("echo $([ $(uname) = 'Darwin' ] && sysctl -n hw.physicalcpu_max || lscpu -p | egrep -v '^#' | sort -u -t, -k 2,4 | wc -l)")
 
-if np.__config__.get_info("lapack_mkl_info"):
-    print("MKL version", get_mkl_version())
-else:
-    print("not using MKL")
-
-print("TF version: ", tf.__git_version__, get_tensorflow_version_url())
-print("PyTorch version", torch.version.__version__)
-
-print("Scipy version: ", scipy.version.full_version)
-print("Numpy version: ", np.version.full_version)
-print("Python version: ", sys.version)
-try:
-  for l in open("/proc/cpuinfo").read().split('\n'):
-    if 'model name' in l:
-      ver = l
-      break
-except:
-  ver = 'unknown'
-print("CPU version: ", ver)
+  # get mapping of logical cores to physical sockets
+  import re
+  socket_re = re.compile(".*?processor.*?(?P<cpu>\d+).*?physical id.*?(?P<socket>\d+).*?power", flags=re.S)
+  from collections import defaultdict
+  socket_dict = defaultdict(list)
+  try:
+    for cpu, socket in socket_re.findall(open('/proc/cpuinfo').read()):
+      socket_dict[socket].append(cpu)
+  except:
+    pass
+  print("CPU physical sockets: ", len(socket_dict))
 
 
-np_data = np.random.random((N, N)).astype(dtype)
-print("Timing in ms for %d x %d SVD"%(N, N))
-
-def func(): linalg.svd(np_data)
-benchmark("numpy default", func)
-
-def func(): linalg.svd(np_data, lapack_driver='gesvd');
-benchmark("numpy gesvd", func)
-
-def func(): linalg.svd(np_data, lapack_driver='gesdd');
-benchmark("numpy gesdd", func)
-
-sess = tf.Session()
-with tf.device("/cpu:0"):
-    data = tf.random_uniform((N, N), dtype=dtype)
-    tf_svd_cpu = tf.group(*tf.svd(data))
-def func(): sess.run(tf_svd_cpu)
-benchmark("TF CPU", func)
-
-with tf.device("/gpu:0"):
-    data = tf.random_uniform((N, N), dtype=dtype)
-    tf_svd_gpu = tf.group(*tf.svd(data))
-def func(): sess.run(tf_svd_gpu)
-benchmark("TF GPU", func)
-
-import torch
-def func(): torch.svd(torch.rand((N,N)))
-benchmark("PyTorch CPU", func)
-def func(): torch.svd(torch.rand((N,N)).cuda())
-benchmark("PyTorch GPU", func)
+if __name__=='__main__':
+  main()
