@@ -21,18 +21,20 @@ import numpy as np
 import os
 import sys
 import time
-# import gc; gc.disable()
 import torch
 import tensorflow as tf
 
-os.environ["TF_CPP_MIN_LOG_LEVEL"]="2"  # nospam
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"  # nospam
 
 HAVE_GPU = tf.test.is_gpu_available()
 NUM_RUNS = 11
 dtype = np.float32
-N=int(os.environ.get('linalg_benchmark_N', 1534))
+N = int(os.environ.get('linalg_benchmark_N', 1534))
+
 
 def main():
+  global sess
+
   if np.__config__.get_info("lapack_mkl_info"):
     print("MKL version", get_mkl_version())
   else:
@@ -47,20 +49,31 @@ def main():
   print_cpu_info()
 
   np_data = np.random.random((N, N)).astype(dtype)
-  print("Timing in ms for %d x %d SVD"%(N, N))
+  print("Timing in ms for %d x %d SVD" % (N, N))
 
-  def func(): linalg.svd(np_data)
+  def func():
+    linalg.svd(np_data)
+
   benchmark("numpy default", func)
 
-  def func(): linalg.svd(np_data, lapack_driver='gesvd');
+  def func():
+    linalg.svd(np_data, lapack_driver='gesvd')
+
   benchmark("numpy gesvd", func)
 
-  def func(): linalg.svd(np_data, lapack_driver='gesdd');
+  def func():
+    linalg.svd(np_data, lapack_driver='gesdd')
+
   benchmark("numpy gesdd", func)
 
-  def func(): torch.svd(torch.rand((N,N)))
+  def func():
+    torch.svd(torch.rand((N, N)))
+
   benchmark("PyTorch CPU", func)
-  def func(): torch.svd(torch.rand((N,N)).cuda())
+
+  def func():
+    torch.svd(torch.rand((N, N)).cuda())
+
   benchmark("PyTorch GPU", func)
 
   # do TensorFlow last because:
@@ -68,7 +81,9 @@ def main():
   # 2. if it runs out of GPU memory, instead of throwing exception it crashes
   #    the entire process with something like
   # F Check failed: cusolverDnCreate(&cusolver_dn_handle) == CUSOLVER_STATUS_SUCCESS Failed to create cuSolverDN instance.
-  sess = tf.Session()
+  config = tf.ConfigProto()
+  config.gpu_options.allow_growth = True
+  sess = tf.Session(config=config)
   # have to assign to variable, otherwise TF optimizes it out
   with tf.device("/cpu:0"):
     variable = tf.Variable(tf.zeros((N, N)), dtype=dtype)
@@ -76,7 +91,10 @@ def main():
     # s/u/v convention https://github.com/tensorflow/tensorflow/pull/13850
     s, u, v = tf.svd(data)
     svd_assign = variable.assign(u)
-  def func(): sess.run(svd_assign)
+
+  def func():
+    sess.run(svd_assign)
+
   benchmark("TF CPU", func)
 
   with tf.device("/gpu:0"):
@@ -84,22 +102,24 @@ def main():
     data = tf.random_uniform((N, N), dtype=dtype)
     s, u, v = tf.svd(data)
     svd_assign = variable.assign(u)
-  def func(): sess.run(svd_assign)
+
+  def func():
+    sess.run(svd_assign)
+
   benchmark("TF GPU", func)
 
 
-
 def get_tensorflow_version_url():
-  version=tf.__version__
+  version = tf.__version__
   commit = tf.__git_version__
   # commit looks like this
   # 'v1.0.0-65-g4763edf-dirty'
-  commit = commit.replace("'","")
+  commit = commit.replace("'", "")
   if commit.endswith('-dirty'):
-      dirty = True
-      commit = commit[:-len('-dirty')]
-  commit=commit.rsplit('-g', 1)[1]
-  url = 'https://github.com/tensorflow/tensorflow/commit/'+commit
+    dirty = True
+    commit = commit[:-len('-dirty')]
+  commit = commit.rsplit('-g', 1)[1]
+  url = 'https://github.com/tensorflow/tensorflow/commit/' + commit
   return url
 
 
@@ -119,81 +139,90 @@ def get_mkl_version():
 
 timeline_counter = 0
 run_options = tf.RunOptions(trace_level=tf.RunOptions.FULL_TRACE)
+
+
 def traced_run(fetches):
-    """Runs fetches, dumps timeline files in current directory."""
-    
-    from tensorflow.python.client import timeline
-    global sess
+  """Runs fetches, dumps timeline files in current directory."""
 
-    global timeline_counter
-    run_metadata = tf.RunMetadata()
+  from tensorflow.python.client import timeline
+  global sess
 
-    results = sess.run(fetches,
-                       options=run_options,
-                       run_metadata=run_metadata)
-    tl = timeline.Timeline(step_stats=run_metadata.step_stats)
-    ctf = tl.generate_chrome_trace_format(show_memory=True,
-                                          show_dataflow=False)
-    open("timeline_%d.json"%(timeline_counter,), "w").write(ctf)
-    open("stepstats_%d.pbtxt"%(timeline_counter,), "w").write(str(
-        run_metadata.step_stats))
-    timeline_counter+=1
-    return results
+  global timeline_counter
+  run_metadata = tf.RunMetadata()
+
+  results = sess.run(fetches,
+                     options=run_options,
+                     run_metadata=run_metadata)
+  tl = timeline.Timeline(step_stats=run_metadata.step_stats)
+  ctf = tl.generate_chrome_trace_format(show_memory=True,
+                                        show_dataflow=False)
+  open("timeline_%d.json" % (timeline_counter,), "w").write(ctf)
+  open("stepstats_%d.pbtxt" % (timeline_counter,), "w").write(str(
+    run_metadata.step_stats))
+  timeline_counter += 1
+  return results
 
 
 def benchmark(message, func):
-    if 'gpu' in message.lower() and not HAVE_GPU:
-        print(f"{message:<20} no GPU detected")
-        return
-    time_list = []
-    try:
-      for i in range(NUM_RUNS):
-          start_time = time.perf_counter()
-          func()
-          time_list.append(time.perf_counter()-start_time)
+  if 'gpu' in message.lower() and not HAVE_GPU:
+    print(f"{message:<20} no GPU detected")
+    return
+  time_list = []
+  try:
+    for i in range(NUM_RUNS):
+      start_time = time.perf_counter()
+      func()
+      time_list.append(time.perf_counter() - start_time)
 
-      time_list = 1000*np.array(time_list)  # get seconds, convert to ms
-      if len(time_list)>0:
-          min = np.min(time_list)
-          median = np.median(time_list)
-          formatted = ["%.2f"%(d,) for d in time_list[:10]]
-          result = f"min: {min:8.2f}, median: {median:8.2f}, mean: {np.mean(time_list):8.2f}"
-      else:
-          result = "empty"
-      print(f"{message:<20} {result}")
-    except Exception as e:
-      print(f"{message:<20} failed with {e}")
+    time_list = 1000 * np.array(time_list)  # get seconds, convert to ms
+    if len(time_list) > 0:
+      min = np.min(time_list)
+      median = np.median(time_list)
+      formatted = ["%.2f" % (d,) for d in time_list[:10]]
+      result = f"min: {min:8.2f}, median: {median:8.2f}, mean: {np.mean(time_list):8.2f}"
+    else:
+      result = "empty"
+    print(f"{message:<20} {result}")
+  except Exception as e:
+    print(f"{message:<20} failed with {e}")
+  sys.stdout.flush()
+
 
 def print_cpu_info():
+  ver = 'unknown'
   try:
     for l in open("/proc/cpuinfo").read().split('\n'):
       if 'model name' in l:
         ver = l
         break
   except:
-    ver = 'unknown'
-    
+    pass
+
   # core counts from https://stackoverflow.com/a/23378780/419116
   print("CPU version: ", ver)
   sys.stdout.write("CPU logical cores: ")
   sys.stdout.flush()
-  os.system("echo $([ $(uname) = 'Darwin' ] && sysctl -n hw.logicalcpu_max || lscpu -p | egrep -v '^#' | wc -l)")
+  os.system(
+    "echo $([ $(uname) = 'Darwin' ] && sysctl -n hw.logicalcpu_max || lscpu -p | egrep -v '^#' | wc -l)")
   sys.stdout.write("CPU physical cores: ")
   sys.stdout.flush()
-  os.system("echo $([ $(uname) = 'Darwin' ] && sysctl -n hw.physicalcpu_max || lscpu -p | egrep -v '^#' | sort -u -t, -k 2,4 | wc -l)")
+  os.system(
+    "echo $([ $(uname) = 'Darwin' ] && sysctl -n hw.physicalcpu_max || lscpu -p | egrep -v '^#' | sort -u -t, -k 2,4 | wc -l)")
 
   # get mapping of logical cores to physical sockets
   import re
-  socket_re = re.compile(".*?processor.*?(?P<cpu>\d+).*?physical id.*?(?P<socket>\d+).*?power", flags=re.S)
+  socket_re = re.compile(
+    ".*?processor.*?(?P<cpu>\d+).*?physical id.*?(?P<socket>\d+).*?power",
+    flags=re.S)
   from collections import defaultdict
   socket_dict = defaultdict(list)
   try:
     for cpu, socket in socket_re.findall(open('/proc/cpuinfo').read()):
       socket_dict[socket].append(cpu)
-  except:
+  except FileNotFoundError:
     pass
   print("CPU physical sockets: ", len(socket_dict))
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
   main()

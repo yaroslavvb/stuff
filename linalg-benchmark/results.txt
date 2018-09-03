@@ -202,4 +202,22 @@ TF GPU               min:  6962.91, median:  7006.48, mean:  8967.89
 PyTorch CPU          min:  1048.54, median:  1226.51, mean:  1269.30
 PyTorch GPU          min:   506.14, median:   511.30, mean:   513.09
 
+================================================================================
 
+MKL version b'Intel(R) Math Kernel Library Version 2018.0.1 Product Build 20171007 for Intel(R) 64 architecture applications'
+TF version:  v1.10.0-4-g0e53c66f33 https://github.com/tensorflow/tensorflow/commit/0e53c66f33
+PyTorch version 0.4.1
+Scipy version:  1.1.0
+Numpy version:  1.14.2
+CPU version:  model name        : Intel(R) Xeon(R) CPU E5-2686 v4 @ 2.30GHz
+CPU logical cores: 72
+CPU physical cores: 36
+CPU physical sockets:  2
+Timing in ms for 6000 x 6000 SVD
+numpy default        min:  8693.95, median:  8710.50, mean:  8742.25
+numpy gesvd          min: 20328.73, median: 20365.47, mean: 20361.31
+numpy gesdd          min:  8686.14, median:  8698.31, mean:  8702.77
+PyTorch CPU          min: 19831.50, median: 20389.32, mean: 20488.78
+PyTorch GPU          no GPU detected
+TF CPU               min: 74721.57, median: 74980.07, mean: 74959.97
+TF GPU               no GPU detected
