@@ -21,7 +21,7 @@ import numpy as np
 import os
 import sys
 import time
-import gc; gc.disable()
+# import gc; gc.disable()
 import torch
 import tensorflow as tf
 
@@ -30,7 +30,7 @@ os.environ["TF_CPP_MIN_LOG_LEVEL"]="2"  # nospam
 HAVE_GPU = tf.test.is_gpu_available()
 NUM_RUNS = 11
 dtype = np.float32
-N=1534
+N=int(os.environ.get('linalg_benchmark_N', 1534))
 
 def main():
   if np.__config__.get_info("lapack_mkl_info"):
@@ -58,6 +58,16 @@ def main():
   def func(): linalg.svd(np_data, lapack_driver='gesdd');
   benchmark("numpy gesdd", func)
 
+  def func(): torch.svd(torch.rand((N,N)))
+  benchmark("PyTorch CPU", func)
+  def func(): torch.svd(torch.rand((N,N)).cuda())
+  benchmark("PyTorch GPU", func)
+
+  # do TensorFlow last because:
+  # 1. it hogs all GPU memory by default
+  # 2. if it runs out of GPU memory, instead of throwing exception it crashes
+  #    the entire process with something like
+  # F Check failed: cusolverDnCreate(&cusolver_dn_handle) == CUSOLVER_STATUS_SUCCESS Failed to create cuSolverDN instance.
   sess = tf.Session()
   # have to assign to variable, otherwise TF optimizes it out
   with tf.device("/cpu:0"):
@@ -72,16 +82,10 @@ def main():
   with tf.device("/gpu:0"):
     variable = tf.Variable(tf.zeros((N, N)), dtype=dtype)
     data = tf.random_uniform((N, N), dtype=dtype)
-    # s/u/v convention https://github.com/tensorflow/tensorflow/pull/13850
     s, u, v = tf.svd(data)
     svd_assign = variable.assign(u)
   def func(): sess.run(svd_assign)
   benchmark("TF GPU", func)
-
-  def func(): torch.svd(torch.rand((N,N)))
-  benchmark("PyTorch CPU", func)
-  def func(): torch.svd(torch.rand((N,N)).cuda())
-  benchmark("PyTorch GPU", func)
 
 
 
@@ -142,20 +146,23 @@ def benchmark(message, func):
         print(f"{message:<20} no GPU detected")
         return
     time_list = []
-    for i in range(NUM_RUNS):
-        start_time = time.perf_counter()
-        func()
-        time_list.append(time.perf_counter()-start_time)
+    try:
+      for i in range(NUM_RUNS):
+          start_time = time.perf_counter()
+          func()
+          time_list.append(time.perf_counter()-start_time)
 
-    time_list = 1000*np.array(time_list)  # get seconds, convert to ms
-    if len(time_list)>0:
-        min = np.min(time_list)
-        median = np.median(time_list)
-        formatted = ["%.2f"%(d,) for d in time_list[:10]]
-        result = f"min: {min:8.2f}, median: {median:8.2f}, mean: {np.mean(time_list):8.2f}"
-    else:
-        result = "empty"
-    print(f"{message:<20} {result}")
+      time_list = 1000*np.array(time_list)  # get seconds, convert to ms
+      if len(time_list)>0:
+          min = np.min(time_list)
+          median = np.median(time_list)
+          formatted = ["%.2f"%(d,) for d in time_list[:10]]
+          result = f"min: {min:8.2f}, median: {median:8.2f}, mean: {np.mean(time_list):8.2f}"
+      else:
+          result = "empty"
+      print(f"{message:<20} {result}")
+    except Exception as e:
+      print(f"{message:<20} failed with {e}")
 
 def print_cpu_info():
   try:

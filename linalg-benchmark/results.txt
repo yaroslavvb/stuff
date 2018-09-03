@@ -24,6 +24,130 @@ PyTorch CPU          min:  2468.93, median:  3316.59, mean:  3295.61
 PyTorch GPU          no GPU detected
 
 ================================================================================
+Results for c5.9xlarge
+MKL version b'Intel(R) Math Kernel Library Version 2018.0.1 Product Build 20171007 for Intel(R) 64 architecture applications'
+TF version:  v1.10.0-4-g0e53c66f33 https://github.com/tensorflow/tensorflow/commit/0e53c66f33
+PyTorch version 0.4.1
+Scipy version:  1.1.0
+Numpy version:  1.14.2
+CPU version:  model name	: Intel(R) Xeon(R) Platinum 8124M CPU @ 3.00GHz
+CPU logical cores: 36
+CPU physical cores: 18
+CPU physical sockets:  1
+Timing in ms for 1534 x 1534 SVD
+numpy default        min:   284.66, median:   285.98, mean:   288.92
+numpy gesvd          min:   904.89, median:   906.37, mean:   906.35
+numpy gesdd          min:   284.46, median:   285.97, mean:   285.74
+PyTorch CPU          min:   906.29, median:  1007.70, mean:   990.27
+PyTorch GPU          no GPU detected
+TF CPU               min:  1104.72, median:  1109.49, mean:  1117.22
+TF GPU               no GPU detected
+
+================================================================================
+Results for m5.24xlarge
+MKL version b'Intel(R) Math Kernel Library Version 2018.0.1 Product Build 20171007 for Intel(R) 64 architecture applications'
+TF version:  v1.10.0-4-g0e53c66f33 https://github.com/tensorflow/tensorflow/commit/0e53c66f33
+PyTorch version 0.4.1
+Scipy version:  1.1.0
+Numpy version:  1.14.2
+CPU version:  model name	: Intel(R) Xeon(R) Platinum 8175M CPU @ 2.50GHz
+CPU logical cores: 96
+CPU physical cores: 48
+CPU physical sockets:  2
+Timing in ms for 1534 x 1534 SVD
+numpy default        min:   354.46, median:   355.40, mean:   358.34
+numpy gesvd          min:  1041.56, median:  1045.46, mean:  1045.10
+numpy gesdd          min:   359.50, median:   360.73, mean:   361.08
+PyTorch CPU          min:   981.22, median:  1137.35, mean:  1146.42
+PyTorch GPU          no GPU detected
+TF CPU               min:  1144.89, median:  1152.68, mean:  1159.44
+TF GPU               no GPU detected
+
+================================================================================
+Results for c5.18xlarge
+MKL version b'Intel(R) Math Kernel Library Version 2018.0.1 Product Build 20171007 for Intel(R) 64 architecture applications'
+TF version:  v1.10.0-4-g0e53c66f33 https://github.com/tensorflow/tensorflow/commit/0e53c66f33
+PyTorch version 0.4.1
+Scipy version:  1.1.0
+Numpy version:  1.14.2
+CPU version:  model name	: Intel(R) Xeon(R) Platinum 8124M CPU @ 3.00GHz
+CPU logical cores: 72
+CPU physical cores: 36
+CPU physical sockets:  2
+Timing in ms for 1534 x 1534 SVD
+numpy default        min:   345.62, median:   346.57, mean:   349.31
+numpy gesvd          min:  1001.29, median:  1005.24, mean:  1005.30
+numpy gesdd          min:   344.10, median:   345.17, mean:   345.64
+PyTorch CPU          min:   967.46, median:  1077.40, mean:  1064.79
+PyTorch GPU          no GPU detected
+TF CPU               min:  1161.04, median:  1165.75, mean:  1173.67
+TF GPU               no GPU detected
+
+================================================================================
+Results for i3.metal
+MKL version b'Intel(R) Math Kernel Library Version 2018.0.1 Product Build 20171007 for Intel(R) 64 architecture applications'
+TF version:  v1.10.0-4-g0e53c66f33 https://github.com/tensorflow/tensorflow/commit/0e53c66f33
+PyTorch version 0.4.1
+Scipy version:  1.1.0
+Numpy version:  1.14.2
+CPU version:  model name	: Intel(R) Xeon(R) CPU E5-2686 v4 @ 2.30GHz
+CPU logical cores: 72
+CPU physical cores: 36
+CPU physical sockets:  2
+Timing in ms for 1534 x 1534 SVD
+numpy default        min:   265.95, median:   266.75, mean:   268.89
+numpy gesvd          min:  1330.13, median:  1332.27, mean:  1332.34
+numpy gesdd          min:   265.25, median:   265.88, mean:   266.33
+PyTorch CPU          min:  1057.18, median:  1287.02, mean:  1278.18
+PyTorch GPU          no GPU detected
+TF CPU               min:  1087.11, median:  1090.07, mean:  1099.65
+TF GPU               no GPU detected
+
+================================================================================
+Results for t3.2xlarge
+MKL version b'Intel(R) Math Kernel Library Version 2018.0.1 Product Build 20171007 for Intel(R) 64 architecture applications'
+TF version:  v1.10.0-4-g0e53c66f33 https://github.com/tensorflow/tensorflow/commit/0e53c66f33
+PyTorch version 0.4.1
+Scipy version:  1.1.0
+Numpy version:  1.14.2
+CPU version:  model name	: Intel(R) Xeon(R) Platinum 8175M CPU @ 2.50GHz
+CPU logical cores: 8
+CPU physical cores: 4
+CPU physical sockets:  1
+Timing in ms for 1534 x 1534 SVD
+numpy default        min:   996.43, median:  1009.60, mean:  1014.57
+numpy gesvd          min:  3488.97, median:  3507.59, mean:  3509.89
+numpy gesdd          min:   993.81, median:  1005.34, mean:  1005.88
+PyTorch CPU          min:  3269.99, median:  3560.03, mean:  3511.52
+PyTorch GPU          no GPU detected
+TF CPU               min:  2088.35, median:  2135.06, mean:  2137.88
+TF GPU               no GPU detected
+
+================================================================================
+Results for p3.16xlarge
+MKL version b'Intel(R) Math Kernel Library Version 2018.0.1 Product Build 20171007 for Intel(R) 64 architecture applications'
+TF version:  v1.10.0-4-g0e53c66f33 https://github.com/tensorflow/tensorflow/commit/0e53c66f33
+PyTorch version 0.4.1
+Scipy version:  1.1.0
+Numpy version:  1.14.2
+CPU version:  model name	: Intel(R) Xeon(R) CPU E5-2686 v4 @ 2.30GHz
+CPU logical cores: 64
+CPU physical cores: 32
+CPU physical sockets:  2
+Timing in ms for 1534 x 1534 SVD
+numpy default        min:   341.24, median:   342.67, mean:   345.49
+numpy gesvd          min:  1331.62, median:  1332.64, mean:  1333.16
+numpy gesdd          min:   341.19, median:   341.50, mean:   341.67
+PyTorch CPU          min:  1190.90, median:  1314.86, mean:  1331.97
+PyTorch GPU          min:   470.67, median:   476.39, mean:   777.78
+TF CPU               min:  1275.53, median:  1298.05, mean:  1297.57
+TF GPU               min:  7037.22, median:  7098.86, mean:  7126.14
+
+
+
+
+
+================================================================================
 r5.large
 
 
@@ -77,4 +201,5 @@ TF CPU               min:  1279.98, median:  1285.51, mean:  1292.32
 TF GPU               min:  6962.91, median:  7006.48, mean:  8967.89
 PyTorch CPU          min:  1048.54, median:  1226.51, mean:  1269.30
 PyTorch GPU          min:   506.14, median:   511.30, mean:   513.09
+
 
