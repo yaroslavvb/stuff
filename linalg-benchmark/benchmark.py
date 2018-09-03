@@ -72,7 +72,8 @@ def main():
   benchmark("PyTorch CPU", func)
 
   def func():
-    torch.svd(torch.rand((N, N)).cuda())
+    torch.svd(torch.rand((N, N)).to('cuda'))
+    torch.cuda.synchronize()
 
   benchmark("PyTorch GPU", func)
 
