@@ -17,7 +17,7 @@ args = parser.parse_args()
 results = {}
 def launch(instance):
   """Run benchmark on given instance type."""
-  task = ncluster.make_task(instance_type=instance, image_name=args.image)
+  task = ncluster.make_task('benchmark-'+instance, instance_type=instance, image_name=args.image)
   task.upload('benchmark.py')
   task.run('source activate tensorflow_p36')
   task.run('pip install torch')
