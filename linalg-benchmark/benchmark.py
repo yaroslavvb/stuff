@@ -13,6 +13,16 @@ TF CPU               min:   965.73, median:  1118.91, mean:  1089.15
 TF GPU               min:  5525.59, median:  5726.54, mean:  5987.72
 PyTorch CPU          min:  1241.66, median:  1372.49, mean:  1389.59
 PyTorch GPU          min:   450.84, median:   455.17, mean:   471.32
+
+Notes:
+352->328 on c5.18
+numactl --cpunodebind=0 --membind=0 python benchmark.py
+
+352->283 on c5.18
+OMP_NUM_THREADS=16
+
+ 
+
 """
 
 import scipy
@@ -29,7 +39,7 @@ os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"  # nospam
 HAVE_GPU = tf.test.is_gpu_available()
 NUM_RUNS = 11
 dtype = np.float32
-N = int(os.environ.get('linalg_benchmark_N', 1534))
+N = int(os.environ.get('LINALG_BENCHMARK_N', 1534))
 
 
 def main():
@@ -55,6 +65,8 @@ def main():
     linalg.svd(np_data)
 
   benchmark("numpy default", func)
+  if 'LINALG_BENCHMARK_SHORT' in os.environ:
+    return
 
   def func():
     linalg.svd(np_data, lapack_driver='gesvd')
