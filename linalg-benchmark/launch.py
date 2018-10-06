@@ -9,7 +9,7 @@ import threading
 
 parser = argparse.ArgumentParser(description='launch')
 parser.add_argument('--instances', default='p3.16xlarge, c5.18xlarge, c5.9xlarge, m5.24xlarge, i3.metal, g3.16xlarge')
-parser.add_argument('--image', default="Deep Learning AMI (Amazon Linux) Version 13.0")
+parser.add_argument('--image', default="Deep Learning AMI (Amazon Linux) Version 15.0")
 parser.add_argument('--N', default='')
 parser.add_argument('--short', action='store_true', help='short version of benchmark')
 args = parser.parse_args()
