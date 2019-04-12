@@ -1,22 +1,28 @@
 # Overfit GPT model to "the quick brown fox"
 #
-# 6.97 -- the quick brown fox fire .   " i 'm sorry , " he
-# 6.08 -- the quick brown fox back .   " i 'm sorry , " he
-# 4.39 -- the quick brown fox fox fox fox fox fox fox fox fox fox fox
-# 3.60 -- the quick brown fox .   " i 'm sorry , " he said
-# 2.36 -- the quick brown fox fox fox fox tail   i do n't know what
-# 1.31 -- the quick brown fox fox   " i 'm not sure what to say
-# 0.85 -- the quick brown fox fox fox quick .   " i 'm not sure
-# 0.42 -- the quick brown fox fox jumps over the fox jumps over the fox jumps
-# 0.18 -- the quick brown fox jumps over the lazy dog jumps over the lazy dog
-# 0.16 -- the quick brown fox quick quick quick quick brown fox jumps over the lazy
-# 0.03 -- the quick brown fox quick brown fox jumps over the lazy dog jumps over
-# 0.02 -- the quick brown fox quick jumps over the lazy dog jumps over the lazy
-# 0.03 -- the quick brown fox quick jumps over the lazy dog jumps over the lazy
-# 0.02 -- the quick brown fox quick brown fox jumps over the lazy dog jumps over
-# 0.06 -- the quick brown fox jumps over the lazy dog jumps over the lazy dog
+# 906.45 -- the a , " he said . " i 'm not
+# 310.08 -- the i - "   " i 'm not going to
+# 134.41 -- the i - "   " i 'm not a child
+# 30.41 -- the i - "   " i 'm not going to
+#  8.07 -- the quick , " he said , " i 'm not
+#  3.61 -- the quick quick quick steps , and then the quick quick
+#  2.15 -- the quick quick quick jumps over the low fence jumps over
+#  1.41 -- the quick fox jumps over the lazy dog jumps over the
+#  1.13 -- the quick fox jumps over the lazy dog jumps over the
+#  1.05 -- the quick quick brown fox jumps over the lazy dog jumps
+#  1.02 -- the quick brown fox jumps over the lazy dog jumps over
+#  1.01 -- the quick jumps over the lazy dog jumps over the lazy
+#  1.02 -- the quick brown fox jumps over the lazy dog jumps over
+#  1.13 -- the quick brown fox jumps over the lazy dog jumps over
+#  1.02 -- the quick brown fox jumps over the lazy dog jumps over
+#  1.00 -- the quick brown fox jumps over the lazy dog jumps over
+#  1.01 -- the quick brown fox jumps over the lazy dog jumps over
+#  1.00 -- the quick brown fox jumps over the lazy dog jumps over
+#  1.00 -- the quick brown fox jumps over the lazy dog jumps over
+#  1.00 -- the quick brown fox jumps over the lazy dog jumps over
 
 
+import math
 import torch
 from pytorch_pretrained_bert import OpenAIGPTTokenizer, OpenAIGPTLMHeadModel
 
@@ -66,12 +72,13 @@ def main():
   
   batch = torch.tensor(encoded)
 
-  start_words = ['the', 'quick', 'brown', 'fox']
+  start_words = ['the']
   start_tokens = [tokenizer.convert_tokens_to_ids(w) for w in start_words]
   
-  for i in range(40):
+  for i in range(20):
     loss = model(input_ids=batch, lm_labels=batch)
-    print('%.2f -- %s'%(loss.detach().numpy(), decode(start_tokens)))
+    perplexity = math.exp(loss.item())
+    print('%5.2f -- %s'%(perplexity, decode(start_tokens)))
 
     loss.backward()
     optimizer.step()
