@@ -2,3 +2,11 @@
 /.ipynb_checkpoints
 *#
 *~
+/linalg-benchmark/.idea/linalg-benchmark.iml
+/linalg-benchmark/.idea/misc.xml
+/linalg-benchmark/.idea/modules.xml
+/linalg-benchmark/.idea/vcs.xml
+/linalg-benchmark/.idea/workspace.xml
+/linalg-benchmark/.idea
+.DS_Store
+__pycache__

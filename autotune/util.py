@@ -1071,6 +1071,23 @@ def pinv(mat: torch.Tensor, cond=None) -> torch.Tensor:
     return u @ v.t()[:rank]
 
 
+def eig_real(mat: torch.Tensor) -> torch.Tensor:
+    """Wrapper around torch.eig which discards imaginary values and returns result in descending order.
+
+    Prints warning when non-zero imaginary parts detected, see "Criteria for the reality of matrix eigenvalues"
+    Products of symmetric matrices are not symmetric but have eigenvalues for no imaginary parts.
+    https://link.springer.com/article/10.1007%2FBF01195188
+    """
+
+    evals = torch.eig(mat).eigenvalues
+    re_part = evals[:, 0]  # extract real part
+    im_part = evals[:, 1]  # extract real part
+    if im_part.sum() / evals.max() > 1e-7:
+        print("Warning, eig_real is discarding non-zero imaginary parts")
+    re_part = re_part.sort(descending=True).values
+    return re_part
+
+
 def pinv_square_root(mat: torch.Tensor, eps=1e-4) -> torch.Tensor:
     nan_check(mat)
     u, s, v = robust_svd(mat)
@@ -1759,7 +1776,7 @@ class SimpleConvolutional(SimpleModel):
     def __init__(self, d: List[int], kernel_size=(2, 2), nonlin=False, bias=False):
         """
 
-        Args:
+        Args:log
             d: list of channels, ie [2, 2] to have 2 conv layers with 2 channels
         """
         super().__init__()
@@ -1989,8 +2006,6 @@ def log_spectrum(tag, vals: torch.Tensor, loglog=True, discard_tiny=False):
         y = torch.log10(y)
         x = torch.log10(x)
     fig, ax = plt.subplots()
-    y = torch.log10(vals)
-    x = torch.log10(torch.arange(len(vals), dtype=y.dtype) + 1.)
     x, y = to_numpys(x, y)
     markerline, stemlines, baseline = ax.stem(x, y, markerfmt='bo', basefmt='r-', bottom=min(y))
     plt.setp(baseline, color='r', linewidth=2)
@@ -2672,6 +2687,9 @@ def copy_stats(shared_stats, stats):
         assert key not in stats, f"Trying to overwrite {key}"
         stats[key] = shared_stats[key]
     return None
+
+
+def skip_nans(t): return t[torch.isfinite(t)]
 
 
 # list replacement. Workaround for AttrDict automatically converting list objects to Tuple
